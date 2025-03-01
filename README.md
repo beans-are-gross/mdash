@@ -46,5 +46,5 @@ cd mdash
 
 ### Step 4 - Install mDash
 ```
-sudo php setup.php db_pass=<new-password>
+sudo php setup.php db_pass=<your-database-password>
 ```
