@@ -1,0 +1,13 @@
+table {
+    background: rgba(128, 128, 128, 0.5);
+    backdrop-filter: blur(10px);
+
+    padding: 10px;
+
+    border-radius: 15px;
+}
+
+th, td {
+    padding-left: 5px;
+    padding-right: 5px;
+}
