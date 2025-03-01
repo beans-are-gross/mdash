@@ -1,5 +1,5 @@
 # mdash
-The simple reverse proxy built with Caddy.
+Reverse proxy made easy.
 
 ## Features
 1. Reverse proxy with a free SSL certificate from Caddy.
