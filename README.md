@@ -2,10 +2,10 @@
 The simple reverse proxy built with Caddy.
 
 ## Features
-1. HTTPS reverse proxy from Caddy
+1. Reverse proxy with a free SSL certificate from Caddy.
 2. Easy to use UI, with a dashboard.
 3. Multiple users can use the same mDash server.
-4. You can share "apps" with other users, giving them view, or view and edit access.
+4. You can share "apps" with other users, giving them view, or view and edit access. (Only the owner of an app can delete it.)
 5. You can give users "admin" rights to allow them to delete users and bad or old login tokens.
 
 ## Setup
