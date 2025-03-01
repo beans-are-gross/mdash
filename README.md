@@ -58,3 +58,5 @@ cd mdash
 ```
 sudo php setup.php db_pass=<your-database-password>
 ```
+
+The background photo used is by [Nat on Unsplash](https://unsplash.com/photos/red-and-blue-textile-on-blue-textile-9l98kFByiao?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash).
