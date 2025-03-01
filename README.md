@@ -1,7 +1,7 @@
 # mdash
 Reverse proxy made easy.
 
-!(https://github.com/beans-are-gross/mdash-photos/blob/main/Home.png?raw=true)
+![](https://github.com/beans-are-gross/mdash-photos/blob/main/Home.png?raw=true)
 
 ## Features
 1. Reverse proxy with a free SSL certificate from Caddy.
