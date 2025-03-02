@@ -22,7 +22,7 @@ parse_str(implode('&', array_slice($argv, 1)), $_GET);
 // +============+
 // | Root Check |
 // +============+
-if(!isset($_GET["docker"]){
+if(!isset($_GET["docker"])){
     if (posix_geteuid() !== 0) {
         redResponse("This script must be run as root. Please use 'sudo' to run the script.");
     } else {
