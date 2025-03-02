@@ -1,6 +1,8 @@
 # mdash
 Reverse proxy made easy.
 
+A web GUI controller for Caddy that automatically gives you an SSL certificate.
+
 ![](https://github.com/beans-are-gross/mdash-photos/blob/main/Home.png?raw=true)
 
 ## Features
