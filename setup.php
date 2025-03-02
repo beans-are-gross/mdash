@@ -86,7 +86,7 @@ blueResponse("Changing Caddyfile access using chmod 660.");
 shell_exec("chmod 660 /etc/caddy/Caddyfile");
 greenResponse("Successfully changed Caddyfile access.");
 
-if(!isset($_GET["docker"]){
+if(!isset($_GET["docker"])){
     blueResponse("Giving the caddy user reload permissions to reload caddy without root.");
     $sudoers = file_get_contents("/etc/sudoers");
     $sudoers = "$sudoers\n\n %caddy cms051=/usr/bin/systemctl reload caddy";
