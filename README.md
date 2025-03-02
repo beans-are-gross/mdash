@@ -22,7 +22,7 @@ The following packages are required:
 4. PHP-MySQL Plugin
 
 > [!NOTE]
-> You can use your existing MySQL installation if it's on the same server as mDash.
+> You can use an existing MySQL installation on another server.
 
 ```
 sudo apt update
@@ -59,8 +59,10 @@ cd mdash
 ```
 
 ### Step 4 - Install mDash
+> [!NOTE]
+> If you have another server running MySQL, change "db_host".
 ```
-sudo php setup.php db_pass=<your-database-password>
+sudo php setup.php db_host=127.0.0.1 db_pass=<your-database-password>
 ```
 
 The background photo used is by [Nat on Unsplash](https://unsplash.com/photos/red-and-blue-textile-on-blue-textile-9l98kFByiao?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash).
