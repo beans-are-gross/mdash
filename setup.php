@@ -28,8 +28,10 @@ if (posix_geteuid() !== 0) {
 
 parse_str(implode('&', array_slice($argv, 1)), $_GET);
 
-if (!isset($_GET["db_pass"])) {
-    redResponse("Please enter the root password for your MySQL server by adding 'db_pass=***' but replace *** with your password.");
+if (!isset($_GET["db_host"])) {
+    redResponse("Please enter the IP address of your MySQL server by adding 'db_host=<your-database-host>'.");
+} else if (!isset($_GET["db_pass"])) {
+    redResponse("Please enter the root password for your MySQL server by adding 'db_pass=<your-database-password>'.");
 }
 echo "\033[94mmDash Setup Script\033[0m\n";
 
@@ -109,7 +111,7 @@ $dbGeneratedPass = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmno
 greenResponse("Generated the database password for mDash successfully.");
 
 blueResponse("Connecting to database using the provided password.");
-$dbConn = mysqli_connect("127.0.0.1", "root", $_GET["db_pass"]);
+$dbConn = mysqli_connect($_GET["db_host"], "root", $_GET["db_pass"]);
 if (!$dbConn) {
     redResponse("Failed to connect to database. Please make sure you have MySQL installed. More info: " . mysqli_connect_error());
 } else {
@@ -199,7 +201,7 @@ if (!$encryptedDbPass) {
 }
 
 blueResponse("Adding the encrypted mDash database password for the config file.");
-$configJson["dbData"] = ["dbHost" => "127.0.0.1", "dbUser" => $dbUser, "dbPass" => $encryptedDbPass, "dbDatabase" => "mdash"];
+$configJson["dbData"] = ["dbHost" => $_GET["db_host"], "dbUser" => $dbUser, "dbPass" => $encryptedDbPass, "dbDatabase" => "mdash"];
 greenResponse("Added the encrypted mDash database password for the config file successfully.");
 
 blueResponse("Generating the JSON for the config file.");
