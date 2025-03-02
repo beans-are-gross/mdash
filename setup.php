@@ -17,22 +17,28 @@ function redResponse($response)
     die("\033[91m$response\033[0m \n");
 }
 
+parse_str(implode('&', array_slice($argv, 1)), $_GET);
+
 // +============+
 // | Root Check |
 // +============+
-if (posix_geteuid() !== 0) {
-    redResponse("This script must be run as root. Please use 'sudo' to run the script.");
-} else {
-    greenResponse("You are running this script as root.");
+if(!isset($_GET["docker"]){
+    if (posix_geteuid() !== 0) {
+        redResponse("This script must be run as root. Please use 'sudo' to run the script.");
+    } else {
+        greenResponse("You are running this script as root.");
+    }
 }
 
-parse_str(implode('&', array_slice($argv, 1)), $_GET);
+$dbHost = "127.0.0.1";
+if (isset($_GET["db_host"])) {
+    $dbHost = $_GET["db_host"];
+}
 
-if (!isset($_GET["db_host"])) {
-    redResponse("Please enter the IP address of your MySQL server by adding 'db_host=<your-database-host>'.");
-} else if (!isset($_GET["db_pass"])) {
+if (!isset($_GET["db_pass"])) {
     redResponse("Please enter the root password for your MySQL server by adding 'db_pass=<your-database-password>'.");
 }
+
 echo "\033[94mmDash Setup Script\033[0m\n";
 
 // +============+
@@ -41,12 +47,12 @@ echo "\033[94mmDash Setup Script\033[0m\n";
 
 blueResponse("Moving mDash root files to root directory.");
 $pwd = str_replace("\n", "", shell_exec("pwd"));
-shell_exec("sudo mv $pwd/mdash-root/ /mdash/");
+shell_exec("mv $pwd/mdash-root/ /mdash/");
 greenResponse("Successfully moved mdash root files to root directory.");
 
 blueResponse("Moving mDash webpage files to /var/www/mdash/.");
-shell_exec("sudo mkdir /var/www/");
-shell_exec("sudo mv $pwd/mdash-caddy/ /var/www/mdash/");
+shell_exec("mkdir /var/www/");
+shell_exec("mv $pwd/mdash-caddy/ /var/www/mdash/");
 greenResponse("Successfully moved mDash webpage files to /var/www/mdash/.");
 
 // +=========================+
@@ -54,10 +60,10 @@ greenResponse("Successfully moved mDash webpage files to /var/www/mdash/.");
 // +=========================+
 
 blueResponse("Installing Caddy. This might take a few seconds to complete.");
-shell_exec("sudo apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl");
-shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");
-shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list");
-shell_exec("sudo apt-get update && apt-get install caddy");
+shell_exec("apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl");
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");
+shell_exec("apt-get update && apt-get install caddy");
 greenResponse("Successfully installed Caddy.");
 
 blueResponse("Seting up Caddy configuration.");
@@ -80,14 +86,16 @@ blueResponse("Changing Caddyfile access using chmod 660.");
 shell_exec("chmod 660 /etc/caddy/Caddyfile");
 greenResponse("Successfully changed Caddyfile access.");
 
-shell_exec("sudo systemctl reload caddy");
-greenResponse("Set up Caddy configuration successfully.");
+if(!isset($_GET["docker"]){
+    blueResponse("Giving the caddy user reload permissions to reload caddy without root.");
+    $sudoers = file_get_contents("/etc/sudoers");
+    $sudoers = "$sudoers\n\n %caddy cms051=/usr/bin/systemctl reload caddy";
+    file_put_contents("/etc/sudoers", $sudoers);
+    greenResponse("Successfully gave the caddy user reload permissions.");
+}
 
-blueResponse("Giving the caddy user reload permissions to reload caddy without root.");
-$sudoers = file_get_contents("/etc/sudoers");
-$sudoers = "$sudoers\n\n %caddy cms051=/usr/bin/systemctl reload caddy";
-file_put_contents("/etc/sudoers", $sudoers);
-greenResponse("Successfully gave the caddy user reload permissions.");
+shell_exec("systemctl reload caddy");
+greenResponse("Set up Caddy configuration successfully.");
 
 // +================+
 // | Setup database |
@@ -111,7 +119,7 @@ $dbGeneratedPass = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmno
 greenResponse("Generated the database password for mDash successfully.");
 
 blueResponse("Connecting to database using the provided password.");
-$dbConn = mysqli_connect($_GET["db_host"], "root", $_GET["db_pass"]);
+$dbConn = mysqli_connect($dbHost, "root", $_GET["db_pass"]);
 if (!$dbConn) {
     redResponse("Failed to connect to database. Please make sure you have MySQL installed. More info: " . mysqli_connect_error());
 } else {
@@ -201,7 +209,7 @@ if (!$encryptedDbPass) {
 }
 
 blueResponse("Adding the encrypted mDash database password for the config file.");
-$configJson["dbData"] = ["dbHost" => $_GET["db_host"], "dbUser" => $dbUser, "dbPass" => $encryptedDbPass, "dbDatabase" => "mdash"];
+$configJson["dbData"] = ["dbHost" => $dbHost, "dbUser" => $dbUser, "dbPass" => $encryptedDbPass, "dbDatabase" => "mdash"];
 greenResponse("Added the encrypted mDash database password for the config file successfully.");
 
 blueResponse("Generating the JSON for the config file.");
