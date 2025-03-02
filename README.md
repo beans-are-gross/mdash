@@ -41,7 +41,7 @@ mysql
 > Dont forget to enter the new password you would like!
 
 ```
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '<new-pass>';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY '<new-pass>';
 ```
 
 ```
