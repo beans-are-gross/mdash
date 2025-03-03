@@ -22,7 +22,7 @@ parse_str(implode('&', array_slice($argv, 1)), $_GET);
 // +============+
 // | Root Check |
 // +============+
-if(!isset($_GET["docker"])){
+if (!isset($_GET["docker"])) {
     if (posix_geteuid() !== 0) {
         redResponse("This script must be run as root. Please use 'sudo' to run the script.");
     } else {
@@ -86,15 +86,7 @@ blueResponse("Changing Caddyfile access using chmod 660.");
 shell_exec("chmod 660 /etc/caddy/Caddyfile");
 greenResponse("Successfully changed Caddyfile access.");
 
-if(!isset($_GET["docker"])){
-    blueResponse("Giving the caddy user reload permissions to reload caddy without root.");
-    $sudoers = file_get_contents("/etc/sudoers");
-    $sudoers = "$sudoers\n\n %caddy cms051=/usr/bin/systemctl reload caddy";
-    file_put_contents("/etc/sudoers", $sudoers);
-    greenResponse("Successfully gave the caddy user reload permissions.");
-}
-
-shell_exec("systemctl reload caddy");
+shell_exec('cd /etc/caddy/ && curl "http://localhost:2019/load" -H "Content-Type: text/caddyfile" --data-binary @Caddyfile');
 greenResponse("Set up Caddy configuration successfully.");
 
 // +================+
