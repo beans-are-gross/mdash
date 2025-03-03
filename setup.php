@@ -86,7 +86,7 @@ blueResponse("Changing Caddyfile access using chmod 660.");
 shell_exec("chmod 660 /etc/caddy/Caddyfile");
 greenResponse("Successfully changed Caddyfile access.");
 
-shell_exec('caddy reload');
+shell_exec('service caddy reload');
 greenResponse("Set up Caddy configuration successfully.");
 
 // +================+
