@@ -45,6 +45,10 @@ if (!isset($_GET["db_pass"])) {
                 break;
             }
         }
+
+        if(!isset($dbPass)){
+            redResponse("Please set the root password for your MySQL server using '-e DB_PASS=<your-database-password>'.");
+        }
     } else {
         redResponse("Please enter the root password for your MySQL server by adding 'db_pass=<your-database-password>'.");
     }
