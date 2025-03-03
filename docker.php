@@ -2,7 +2,7 @@
 //install packages
 echo "Installing packages.\n";
 shell_exec("apt-get update");
-shell_exec("apt-get install git php-fpm php-mysql -y");
+shell_exec("apt-get install git php-fpm php-mysql systemctl -y");
 
 //install mdash
 echo "Downloading mDash.\n";
