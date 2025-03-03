@@ -52,6 +52,8 @@ if (!isset($_GET["db_pass"])) {
     } else {
         redResponse("Please enter the root password for your MySQL server by adding 'db_pass=<your-database-password>'.");
     }
+} else {
+    $dbPass = $_GET["db_pass"];
 }
 
 echo "\033[94mmDash Setup Script\033[0m\n";
@@ -126,7 +128,7 @@ $dbGeneratedPass = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmno
 greenResponse("Generated the database password for mDash successfully.");
 
 blueResponse("Connecting to database using the provided password.");
-$dbConn = mysqli_connect($dbHost, "root", $_GET["db_pass"]);
+$dbConn = mysqli_connect($dbHost, "root", $dbPass);
 if (!$dbConn) {
     redResponse("Failed to connect to database. Please make sure you have MySQL installed. More info: " . mysqli_connect_error());
 } else {
