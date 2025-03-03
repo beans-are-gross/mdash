@@ -36,7 +36,18 @@ if (isset($_GET["db_host"])) {
 }
 
 if (!isset($_GET["db_pass"])) {
-    redResponse("Please enter the root password for your MySQL server by adding 'db_pass=<your-database-password>'.");
+    if (isset($_GET["docker"])) {
+        $env = shell_exec("env");
+        $env = explode("\n", $env);
+        foreach ($env as $envVar) {
+            if (strpos($envVar, "DB_PASS=") === 0) {
+                $dbPass = explode("=", $envVar)[1];
+                break;
+            }
+        }
+    } else {
+        redResponse("Please enter the root password for your MySQL server by adding 'db_pass=<your-database-password>'.");
+    }
 }
 
 echo "\033[94mmDash Setup Script\033[0m\n";
