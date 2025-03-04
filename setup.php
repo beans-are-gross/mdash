@@ -22,7 +22,9 @@ parse_str(implode('&', array_slice($argv, 1)), $_GET);
 // +============+
 // | Root Check |
 // +============+
-if (!isset($_GET["docker"])) {
+$docker = isset($_GET["docker"]);
+
+if (!$docker) {
     if (posix_geteuid() !== 0) {
         redResponse("This script must be run as root. Please use 'sudo' to run the script.");
     } else {
@@ -30,17 +32,16 @@ if (!isset($_GET["docker"])) {
     }
 }
 
-if(isset($_GET["docker"])) {
+if ($docker) {
     $dbHost = "172.220.0.5";
-}
-else if (isset($_GET["db_host"])) {
+} else if (isset($_GET["db_host"])) {
     $dbHost = $_GET["db_host"];
 } else {
     $dbHost = "127.0.0.1";
 }
 
 if (!isset($_GET["db_pass"])) {
-    if (isset($_GET["docker"])) {
+    if ($docker) {
         $env = shell_exec("env");
         $env = explode("\n", $env);
         foreach ($env as $envVar) {
@@ -89,7 +90,7 @@ shell_exec("apt-get update && apt-get install caddy");
 greenResponse("Successfully installed Caddy.");
 
 blueResponse("Seting up Caddy configuration.");
-if (isset($_GET["docker"])) {
+if ($docker) {
     $caddyfile = ":8080 {\n" .
         "   root * /var/www/mdash/\n" .
         "   file_server\n" .
@@ -171,7 +172,7 @@ if (!$checkIfUserExistsQuery) {
         greenResponse("No old mDash user found.");
         blueResponse("Creating the mDash user.");
 
-        $userIp = isset($_GET["docker"]) ? "172.220.0.10" : "127.0.0.1";
+        $userIp = $docker ? "172.220.0.10" : "127.0.0.1";
 
         $createUserQuery = mysqli_query($dbConn, "CREATE USER IF NOT EXISTS `mdash_php`@`$userIp` IDENTIFIED WITH caching_sha2_password BY '$dbGeneratedPass';");
 
@@ -237,7 +238,7 @@ blueResponse("Adding the encrypted mDash database password for the config file."
 $configJson["dbData"] = ["dbHost" => $dbHost, "dbUser" => $dbUser, "dbPass" => $encryptedDbPass, "dbDatabase" => "mdash"];
 greenResponse("Added the encrypted mDash database password for the config file successfully.");
 
-$config["docker"] = isset($_GET["docker"]);
+$config["docker"] = $docker;
 
 blueResponse("Generating the JSON for the config file.");
 $configJson = json_encode($configJson);
@@ -249,7 +250,7 @@ greenResponse("Wrote the JSON to the config file successfully.");
 
 $ip = str_replace("\n", "", shell_exec("hostname -i"));
 
-if (isset($_GET["docker"])) {
+if ($docker) {
     echo "\033[94mmDash Setup Script Complete\033[0m\n";
     exit(143); //Graceful termination (SIGTERM)
 } else {
