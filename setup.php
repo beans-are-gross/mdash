@@ -167,7 +167,9 @@ if (!$checkIfUserExistsQuery) {
         greenResponse("No old mDash user found.");
         blueResponse("Creating the mDash user.");
 
-        $createUserQuery = mysqli_query($dbConn, "CREATE USER IF NOT EXISTS `mdash_php`@`127.0.0.1` IDENTIFIED WITH caching_sha2_password BY '$dbGeneratedPass';");
+            $userIp = isset($_GET["docker"]) ? "172.220.0.10" : "127.0.0.1";
+
+        $createUserQuery = mysqli_query($dbConn, "CREATE USER IF NOT EXISTS `mdash_php`@`$userIp` IDENTIFIED WITH caching_sha2_password BY '$dbGeneratedPass';");
 
         if (!$createUserQuery) {
             redResponse("Failed to create mDash user. More info: " . mysqli_error($dbConn));
