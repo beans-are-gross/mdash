@@ -84,12 +84,21 @@ shell_exec("apt-get update && apt-get install caddy");
 greenResponse("Successfully installed Caddy.");
 
 blueResponse("Seting up Caddy configuration.");
-$caddyfile = ":8080 {\n" .
-    "   root * /var/www/mdash/\n" .
-    "   file_server\n" .
-    "   php_fastcgi unix//run/php/php-fpm.sock\n" .
-    "}\n\n";
-file_put_contents("/etc/caddy/Caddyfile", $caddyfile);
+if(isset($_GET["docker"])){
+    $caddyfile = ":8080 {\n" .
+        "   root * /var/www/mdash/\n" .
+        "   file_server\n" .
+        "   php_fastcgi 172.220.0.10:9000\n" .
+        "}\n\n";
+    file_put_contents("/etc/caddy/Caddyfile", $caddyfile);
+} else {
+    $caddyfile = ":8080 {\n" .
+        "   root * /var/www/mdash/\n" .
+        "   file_server\n" .
+        "   php_fastcgi unix//run/php/php-fpm.sock\n" .
+        "}\n\n";
+    file_put_contents("/etc/caddy/Caddyfile", $caddyfile);
+}
 
 shell_exec("cd /etc/caddy/ && caddy fmt --overwrite");
 
@@ -221,6 +230,8 @@ blueResponse("Adding the encrypted mDash database password for the config file."
 $configJson["dbData"] = ["dbHost" => $dbHost, "dbUser" => $dbUser, "dbPass" => $encryptedDbPass, "dbDatabase" => "mdash"];
 greenResponse("Added the encrypted mDash database password for the config file successfully.");
 
+$config["docker"] = isset($_GET["docker"]);
+
 blueResponse("Generating the JSON for the config file.");
 $configJson = json_encode($configJson);
 greenResponse("Generated the JSON for the config file successfully.");
@@ -232,7 +243,6 @@ greenResponse("Wrote the JSON to the config file successfully.");
 $ip = str_replace("\n", "", shell_exec("hostname -i"));
 
 if (isset($_GET["docker"])) {
-    shell_exec("cp /run/php/php-fpm.sock /mdash-php-fpm/php-fpm.sock");
     echo "\033[94mmDash Setup Script Complete\033[0m\n";
     exit(143); //Graceful termination (SIGTERM)
 } else {

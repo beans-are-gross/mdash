@@ -7,6 +7,7 @@ header("Content-Type: application/json");
 $config = json_decode(file_get_contents("/mdash/config.json"), true);
 $encryptionInfo = $config["encryption"];
 $dbInfo = $config["dbData"];
+$docker = $config["docker"];
 
 $dbHost = $dbInfo["dbHost"];
 $dbUser = $dbInfo["dbUser"];
@@ -36,11 +37,19 @@ if (!$appQuery) {
 
 mysqli_stmt_bind_result($stmt, $intUrl, $intUrlSsl, $extUrl);
 
-$caddyfile = ":8080 {\n" .
-    "   root * /var/www/mdash/\n" .
-    "   file_server\n" .
-    "   php_fastcgi unix//run/php/php-fpm.sock\n" .
-    "}\n\n";
+if ($docker) {
+    $caddyfile = ":8080 {\n" .
+        "   root * /var/www/mdash/\n" .
+        "   file_server\n" .
+        "   php_fastcgi 172.220.0.10:9000\n" .
+        "}\n\n";
+} else {
+    $caddyfile = ":8080 {\n" .
+        "   root * /var/www/mdash/\n" .
+        "   file_server\n" .
+        "   php_fastcgi unix//run/php/php-fpm.sock\n" .
+        "}\n\n";
+}
 
 while (mysqli_stmt_fetch($stmt)) {
     $intUrl = openssl_decrypt(
@@ -70,10 +79,10 @@ while (mysqli_stmt_fetch($stmt)) {
     if ($intUrlSsl) {
         $caddyfile .= "$extUrl {\n" .
             "   reverse_proxy $intUrl{\n" .
-            "       transport http {\n".
+            "       transport http {\n" .
             "           tls\n" .
             "           tls_insecure_skip_verify\n" .
-            "       }\n".
+            "       }\n" .
             "   }\n" .
             "}\n\n";
     } else {
