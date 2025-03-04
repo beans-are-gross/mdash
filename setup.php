@@ -192,7 +192,7 @@ if (!$checkIfUserExistsQuery) {
 }
 
 blueResponse("Granting the mDash user the necessary privileges.");
-$grantUserQuery = mysqli_query($dbConn, "GRANT SELECT, INSERT, UPDATE, DELETE ON  `mdash`.* TO `mdash_php`@`127.0.0.1`;");
+$grantUserQuery = mysqli_query($dbConn, "GRANT SELECT, INSERT, UPDATE, DELETE ON  `mdash`.* TO `mdash_php`@`$userIp`;");
 if (!$grantUserQuery) {
     redResponse("Failed to grant mDash user privileges. More info: " . mysqli_error($dbConn));
 } else {
