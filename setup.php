@@ -46,7 +46,7 @@ if (!isset($_GET["db_pass"])) {
             }
         }
 
-        if(!isset($dbPass)){
+        if (!isset($dbPass)) {
             redResponse("Please set the root password for your MySQL server using '-e DB_PASS=<your-database-password>'.");
         }
     } else {
@@ -231,4 +231,10 @@ greenResponse("Wrote the JSON to the config file successfully.");
 
 $ip = str_replace("\n", "", shell_exec("hostname -i"));
 
-echo "\033[94mmDash Setup Script Complete\nEnjoy at: {$ip}:8080\033[0m\n";
+if (isset($_GET["docker"])) {
+    shell_exec("cp /run/php/php-fpm.sock /mdash-php-fpm/php-fpm.sock");
+    echo "\033[94mmDash Setup Script Complete\033[0m\n";
+    exit(143); //Graceful termination (SIGTERM)
+} else {
+    echo "\033[94mmDash Setup Script Complete\nEnjoy at: {$ip}:8080\033[0m\n";
+}
