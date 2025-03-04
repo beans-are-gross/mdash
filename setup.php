@@ -33,11 +33,14 @@ if (!$docker) {
 }
 
 if ($docker) {
+    blueResponse("Docker Setup");
     $dbHost = "172.220.0.5";
-} else if (isset($_GET["db_host"])) {
-    $dbHost = $_GET["db_host"];
 } else {
-    $dbHost = "127.0.0.1";
+    if (isset($_GET["db_host"])) {
+        $dbHost = $_GET["db_host"];
+    } else {
+        $dbHost = "127.0.0.1";
+    }
 }
 
 if (!isset($_GET["db_pass"])) {
