@@ -64,7 +64,8 @@ echo "\033[94mmDash Setup Script\033[0m\n";
 
 blueResponse("Moving mDash root files to root directory.");
 $pwd = str_replace("\n", "", shell_exec("pwd"));
-shell_exec("mv $pwd/mdash-root/ /mdash/");
+shell_exec("mkdir /mdash/");
+shell_exec("mv $pwd/mdash-root/* /mdash/");
 greenResponse("Successfully moved mdash root files to root directory.");
 
 blueResponse("Moving mDash webpage files to /var/www/mdash/.");
