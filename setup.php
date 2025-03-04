@@ -30,9 +30,13 @@ if (!isset($_GET["docker"])) {
     }
 }
 
-$dbHost = "127.0.0.1";
-if (isset($_GET["db_host"])) {
+if(isset($_GET["docker"])) {
+    $dbHost = "172.220.0.5";
+}
+else if (isset($_GET["db_host"])) {
     $dbHost = $_GET["db_host"];
+} else {
+    $dbHost = "127.0.0.1";
 }
 
 if (!isset($_GET["db_pass"])) {
@@ -85,7 +89,7 @@ shell_exec("apt-get update && apt-get install caddy");
 greenResponse("Successfully installed Caddy.");
 
 blueResponse("Seting up Caddy configuration.");
-if(isset($_GET["docker"])){
+if (isset($_GET["docker"])) {
     $caddyfile = ":8080 {\n" .
         "   root * /var/www/mdash/\n" .
         "   file_server\n" .
@@ -167,7 +171,7 @@ if (!$checkIfUserExistsQuery) {
         greenResponse("No old mDash user found.");
         blueResponse("Creating the mDash user.");
 
-            $userIp = isset($_GET["docker"]) ? "172.220.0.10" : "127.0.0.1";
+        $userIp = isset($_GET["docker"]) ? "172.220.0.10" : "127.0.0.1";
 
         $createUserQuery = mysqli_query($dbConn, "CREATE USER IF NOT EXISTS `mdash_php`@`$userIp` IDENTIFIED WITH caching_sha2_password BY '$dbGeneratedPass';");
 
