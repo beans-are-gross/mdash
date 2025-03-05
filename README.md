@@ -33,6 +33,6 @@ docker run -d --name mdash-caddy --network mdash -p 80:80 -p 443:443 -p 8080:808
 ```
 
 ## Terminal Install
-Please view [terminal.md](https://github.com/beans-are-gross/mdash/terminal.md)
+Please view [terminal.md](https://github.com/beans-are-gross/mdash/blob/main/terminal.md)
 
 The background photo used is by [Nat on Unsplash](https://unsplash.com/photos/red-and-blue-textile-on-blue-textile-9l98kFByiao?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash).
