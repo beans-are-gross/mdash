@@ -32,7 +32,7 @@ docker run -d --name mdash-php --network mdash --ip 172.220.0.10 -p 9000:9000 -v
 docker run -d --name mdash-caddy --network mdash -p 80:80 -p 443:443 -p 8080:8080 -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ caddy
 ```
 
-## Terminal Install
+## Seperate Server Install
 Please view [terminal.md](https://github.com/beans-are-gross/mdash/blob/main/terminal.md)
 
 The background photo used is by [Nat on Unsplash](https://unsplash.com/photos/red-and-blue-textile-on-blue-textile-9l98kFByiao?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash).
