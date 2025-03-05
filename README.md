@@ -12,6 +12,69 @@ A web GUI controller for Caddy that automatically gives you an SSL certificate.
 4. You can share "apps" with other users, giving them view, or view and edit access. (Only the owner of an app can delete it.)
 5. You can give users "admin" rights to allow them to delete users and bad or old login tokens.
 
+## Docker Compose
+### Create Volumes
+```
+docker volume create mdash-root
+docker volume create mdash-php
+docker volume create mdash-caddyfile
+docker network create mdash --subnet 172.220.0.0/24
+```
+
+## Compose
+```
+name: mdash
+services:
+    mysql:
+        container_name: mdash-mysql
+        networks:
+            mdash:
+                ipv4_address: 172.220.0.5
+        environment:
+            - MYSQL_ROOT_HOST=%
+            - MYSQL_ROOT_PASSWORD=<your-database-password>
+        image: mysql
+        restart: unless-stopped
+    mdash:
+        container_name: mdash-installer
+        networks:
+            - mdash
+        volumes:
+            - mdash-root:/mdash/
+            - mdash-php:/var/www/
+            - mdash-caddyfile:/etc/caddy/
+        environment:
+            - DB_PASS=<your-database-password>
+        image: beansaregross/mdash
+        restart: unless-stopped
+networks:
+    mdash:
+        external: true
+        name: mdash
+volumes:
+    mdash-root:
+        external: true
+        name: mdash-root
+    mdash-php:
+        external: true
+        name: mdash-php
+    mdash-caddyfile:
+        external: true
+        name: mdash-caddyfile
+```
+
+### One Time Container
+This container adds the files to the volumes for the other containers to use.
+```
+docker run -d --name mdash-installer --restart unless-stopped --network mdash -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ -e DB_PASS=<your-database-password> beansaregross/mdash
+```
+
+> [!IMPORTANT]
+> Wait until the "mdash-installer" container exits with a status code of 143 to continue.
+> If the status is not 143, please check the logs.
+>
+> Then, restart the compose to update caddy.
+
 ## Docker Command Line
 ```
 docker volume create mdash-root
@@ -19,8 +82,8 @@ docker volume create mdash-php
 docker volume create mdash-caddyfile
 docker network create mdash --subnet 172.220.0.0/24
 
-docker run -d --name mdash-mysql --network mdash --ip 172.220.0.5 -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=<your-database-password> mysql
-docker run -d --name mdash-installer --network mdash -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ -e DB_PASS=<your-database-password> beansaregross/mdash
+docker run -d --name mdash-mysql --restart unless-stopped --network mdash --ip 172.220.0.5 -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=<your-database-password> mysql
+docker run -d --name mdash-installer --restart unless-stopped --network mdash -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ -e DB_PASS=<your-database-password> beansaregross/mdash
 ```
 
 > [!IMPORTANT]
