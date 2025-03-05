@@ -12,8 +12,24 @@ A web GUI controller for Caddy that automatically gives you an SSL certificate.
 4. You can share "apps" with other users, giving them view, or view and edit access. (Only the owner of an app can delete it.)
 5. You can give users "admin" rights to allow them to delete users and bad or old login tokens.
 
-## Setup
+## Command Line
+```
+docker volume create mdash-root
+docker volume create mdash-php
+docker volume create mdash-caddyfile
+docker network create mdash --subnet 172.220.0.0/24
 
+docker run -d --name mdash-mysql --network mdash --ip 172.220.0.5 -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=<your-database-password> mysql
+docker run -d --name mdash-installer --network mdash -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ -e DB_PASS=<your-database-password> beansaregross/mdash
+```
 
+> [!IMPORTANT]
+> Wait until the "mdash-installer" container exits with a status code of 143 to continue.
+> If the status is not 143, please check the logs.
+
+```
+docker run -d --name mdash-php --network mdash --ip 172.220.0.10 -p 9000:9000 -v mdash-root:/mdash/ -v mdash-php:/var/www/ beansaregross/mdash-php
+docker run -d --name mdash-caddy --network mdash -p 80:80 -p 443:443 -p 8080:8080 -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ caddy
+```
 
 The background photo used is by [Nat on Unsplash](https://unsplash.com/photos/red-and-blue-textile-on-blue-textile-9l98kFByiao?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash).
