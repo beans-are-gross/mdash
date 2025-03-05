@@ -1,4 +1,4 @@
-# mdash
+# mDash
 Reverse proxy made easy.
 
 A web GUI controller for Caddy that automatically gives you an SSL certificate.
