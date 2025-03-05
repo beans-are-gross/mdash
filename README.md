@@ -12,7 +12,7 @@ A web GUI controller for Caddy that automatically gives you an SSL certificate.
 4. You can share "apps" with other users, giving them view, or view and edit access. (Only the owner of an app can delete it.)
 5. You can give users "admin" rights to allow them to delete users and bad or old login tokens.
 
-## Command Line
+## Docker Command Line
 ```
 docker volume create mdash-root
 docker volume create mdash-php
@@ -31,5 +31,8 @@ docker run -d --name mdash-installer --network mdash -v mdash-root:/mdash/ -v md
 docker run -d --name mdash-php --network mdash --ip 172.220.0.10 -p 9000:9000 -v mdash-root:/mdash/ -v mdash-php:/var/www/ beansaregross/mdash-php
 docker run -d --name mdash-caddy --network mdash -p 80:80 -p 443:443 -p 8080:8080 -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ caddy
 ```
+
+## Terminal Install
+Please view (terminal.md)[https://github.com/beans-are-gross/mdash/terminal.md]
 
 The background photo used is by [Nat on Unsplash](https://unsplash.com/photos/red-and-blue-textile-on-blue-textile-9l98kFByiao?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash).
