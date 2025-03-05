@@ -21,7 +21,7 @@ docker volume create mdash-caddyfile
 docker network create mdash --subnet 172.220.0.0/24
 ```
 
-## Compose
+### Compose
 ```
 name: mdash
 services:
