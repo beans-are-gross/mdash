@@ -22,7 +22,7 @@ require_once "/var/www/mdash/header.php";
                 </thead>
                 <tbody>
                     <?php
-                    $modules = shell_exec("caddy list-modules --versions");
+                    $modules = shell_exec("caddy list-modules --skip-standard --versions");
                     $modules = explode("\n", $modules);
                     $stats = "";
                     foreach ($modules as $module) {
