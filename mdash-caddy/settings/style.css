@@ -5,6 +5,10 @@ table {
     padding: 10px;
 
     border-radius: 15px;
+
+    display: block;
+    max-height: 50vh;
+    overflow: scroll;
 }
 
 th, td {

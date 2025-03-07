@@ -49,6 +49,7 @@ require "/var/www/mdash/header.php";
             //display the app as it would be on the dashboard
             $name = decryptData($name);
             $intUrl = decryptData($intUrl);
+            $intUrl = $intUrl == "---" ? "" : $intUrl;
             $intUrlSsl = decryptData($intUrlSsl) ? "checked" : "";
             $extUrl = decryptData($extUrl);
             $icon = decryptData($icon);
@@ -67,6 +68,8 @@ require "/var/www/mdash/header.php";
                 <p class="form-secondary">Name</p>
                 <input type="text" id="name" placeholder="Name" value="<?php echo $name; ?>">
             </div>
+
+            <p class="secondary">Leave internal URL blank if you only need a link.</p>
 
             <div class="form-field-double" id="int-url-field">
                 <p class="form-secondary">Internal URL</p>

@@ -16,9 +16,12 @@ if (isset($data["name"]) && isset($data["intUrl"]) && isset($data["intUrlSsl"]) 
     //decrypt the id
     $id = decryptData($data["id"]);
 
+    //check for a link only app
+    $intUrl = empty($data["intUrl"]) ? "---" : $data["intUrl"]; //--- means ignore for build-caddyfile.php
+
     //encrypt the other data
     $name = encryptData($data["name"]);
-    $intUrl = encryptData($data["intUrl"]);
+    $intUrl = encryptData($intUrl);
     $intUrlSsl = encryptData($data["intUrlSsl"]);
     $extUrl = encryptData($data["extUrl"]);
     $icon = encryptData($data["icon"]);
@@ -97,8 +100,8 @@ if (isset($data["name"]) && isset($data["intUrl"]) && isset($data["intUrlSsl"]) 
         echo json_encode(["error" => "Failed to edit the app in the database: " . mysqli_stmt_error($stmt)]);
     } else {
         //call the build Caddyfile script
-        $buildCaddyfile = json_decode(shell_exec("php /mdash/build-caddyfile.php"), true)["status"];
-        if ($buildCaddyfile !== "ok") {
+        $buildCaddyfile = json_decode(shell_exec("php /mdash/build-caddyfile.php"), true);
+        if (!isset($buildCaddyfile["status"])) {
             echo json_encode(["error" => "Failed to build Caddyfile."]);
         } else {
             echo json_encode(["success" => true]);

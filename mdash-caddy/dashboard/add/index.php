@@ -14,6 +14,8 @@ require_once "/var/www/mdash/header.php";
                 <input type="text" id="name" placeholder="Name">
             </div>
 
+            <p class="secondary">Leave internal URL blank if you only need a link.</p>
+
             <div class="form-field-double" id="int-url-field">
                 <input type="text" id="int-url" placeholder="Internal URL">
                 <div class="splitter"></div>

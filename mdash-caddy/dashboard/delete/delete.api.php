@@ -49,8 +49,8 @@ if (isset($_POST["id"])) {
         die("Failed to delete the app in the database: " . mysqli_stmt_error($stmt));
     } else {
         //call the build Caddyfile script
-        $buildCaddyfile = json_decode(shell_exec("php /mdash/build-caddyfile.php"), true)["status"];
-        if ($buildCaddyfile !== "ok") {
+        $buildCaddyfile = json_decode(shell_exec("php /mdash/build-caddyfile.php"), true);
+        if (!isset($buildCaddyfile["status"])) {
             die("Failed to build Caddyfile.");
         } else {
             header("Location: /dashboard/");
