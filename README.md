@@ -93,7 +93,7 @@ docker run -d --name mdash-installer --restart unless-stopped --network mdash -v
 > Wait until the "mdash-installer" container exits with a status code of 143 to continue.
 > If the status is not 143, please check the logs.
 >
-> Then, restart the compose to update the files into caddy.
+> Then, restart the compose to update the files in Caddy.
 
 ## Seperate Server Install
 Please view [terminal.md](https://github.com/beans-are-gross/mdash/blob/main/terminal.md)
