@@ -137,6 +137,10 @@ select {
   margin-left: 5px;
 }
 
+option {
+  color: black;
+}
+
 .form-field-double input[type="checkbox"] {
   height: 100%;
 }
@@ -171,6 +175,9 @@ select {
   outline: none;
   text-align: left;
   cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .error {

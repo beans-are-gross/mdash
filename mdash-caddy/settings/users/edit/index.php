@@ -85,7 +85,10 @@ $accountId = $accountInfo[0];
                     </button>
                 </div>
 
-                <button type="submit">Edit User</button>
+                <div class="center">
+                    <button type="submit">Edit User</button>
+                    <button type="button" onclick="window.location.href = '../';">Cancel</button>
+                </div>
             </form>
         </div>
     </div>

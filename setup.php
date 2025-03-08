@@ -81,15 +81,17 @@ shell_exec("mkdir /var/www/");
 shell_exec("mv $pwd/mdash-caddy/ /var/www/mdash/");
 greenResponse("Successfully moved mDash webpage files to /var/www/mdash/.");
 
-// +=========================+
-// | Install and setup Caddy |
-// +=========================+
+// +=========================================+
+// | Install and setup Caddy, xcaddy, and go |
+// +=========================================+
 
 blueResponse("Installing Caddy. This might take a few seconds to complete.");
 shell_exec("apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl");
-shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");
-shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");
-shell_exec("apt-get update && apt-get install caddy");
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");        //caddy
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");                         //caddy
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg");   //xcaddy
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list");                    //xcaddy
+shell_exec("apt-get update && apt-get install caddy xcaddy golang-go");
 greenResponse("Successfully installed Caddy.");
 
 blueResponse("Seting up Caddy configuration.");
@@ -216,11 +218,21 @@ if (!$createTokenTableQuery) {
 }
 
 blueResponse("Creating the app table.");
-$createTokenTableQuery = mysqli_query($dbConn, "CREATE TABLE `mdash`.`apps` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `int_url` VARCHAR(255) NOT NULL , `int_url_ssl` VARCHAR(255) NOT NULL , `ext_url` VARCHAR(255) NOT NULL , `icon` VARCHAR(255) NOT NULL , `sharing` VARCHAR(1000) NOT NULL , `owner` VARCHAR(1000) NOT NULL , PRIMARY KEY (`id`));");
+$createTokenTableQuery = mysqli_query($dbConn, "CREATE TABLE IF NOT EXISTS `mdash`.`apps` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `int_url` VARCHAR(255) NOT NULL , `int_url_ssl` VARCHAR(255) NOT NULL , `ext_url` VARCHAR(255) NOT NULL , `icon` VARCHAR(255) NOT NULL , `sharing` VARCHAR(1000) NOT NULL , `owner` VARCHAR(1000) NOT NULL , PRIMARY KEY (`id`));");
 if (!$createTokenTableQuery) {
     redResponse("Failed to create the app table. More info: " . mysqli_error($dbConn));
 } else {
     greenResponse("Created the app table successfully.");
+}
+
+if (!$docker) {
+    blueResponse("Creating the module table.");
+    $createModuleTableQuery = mysqli_query($dbConn, "CREATE TABLE IF NOT EXISTS `mdash`.`modules` ( `id` VARCHAR(255) NOT NULL , `url`  VARCHAR(1000) NOT NULL , PRIMARY KEY (`id`));");
+    if (!$createModuleTableQuery) {
+        redResponse("Failed to create the module table. More info: " . mysqli_error($dbConn));
+    } else {
+        greenResponse("Created the module table successfully.");
+    }
 }
 
 blueResponse("Encrypting the mDash database password for the config file.");
