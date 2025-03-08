@@ -22,7 +22,7 @@ parse_str(implode('&', array_slice($argv, 1)), $_GET);
 // +============+
 // | Root Check |
 // +============+
-$docker = isset($_GET["docker"]);
+$docker = isset($_GET["docker"]) ? true : false;
 
 if (!$docker) {
     if (posix_geteuid() !== 0) {
