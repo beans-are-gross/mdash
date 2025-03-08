@@ -95,7 +95,7 @@ docker run -d --name mdash-installer --restart unless-stopped --network mdash -v
 >
 > Then, restart the compose to update the files in Caddy.
 
-## Seperate Server Install
+## Server Install
 Please view [terminal.md](https://github.com/beans-are-gross/mdash/blob/main/terminal.md)
 
 The new background photo used is by [Kalen Emsley on Unsplash](https://unsplash.com/photos/green-mountain-across-body-of-water-Bkci_8qcdvQ?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
