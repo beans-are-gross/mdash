@@ -91,7 +91,7 @@ shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | 
 shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");                         //caddy
 shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg");   //xcaddy
 shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list");                    //xcaddy
-shell_exec("apt-get update && apt-get install caddy xcaddy golang-go");
+shell_exec("apt-get update && apt-get install caddy xcaddy golang-go -y");
 greenResponse("Successfully installed Caddy.");
 
 blueResponse("Seting up Caddy configuration.");
