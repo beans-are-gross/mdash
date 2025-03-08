@@ -32,7 +32,7 @@ if (!isset($_GET["confirm"])) {
 }
 
 if(!isset($_GET["db_pass"])) {
-    redResponse("Please enter the root password for your MySQL server by adding 'db_pass=***' but replace *** with your password. If you never changed it, it is defaultly blank.");
+    redResponse("Please enter the root password for your MySQL server by adding 'db_pass=<your-database-password>'.");
 }
 
 blueResponse("Connecting to the mDash database.");
