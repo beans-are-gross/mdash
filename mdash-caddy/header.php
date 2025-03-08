@@ -13,7 +13,7 @@ if (!is_array($accountInfo)) {
     header("Location: /?$accountInfo");
 } else {
     $config = json_decode(file_get_contents("/mdash/config.json"), true);
-    $docker = $config["docker"];
+    $docker = isset($config["docker"]);
 
     //check if the script wants a database connection
     if (isset($dbConnRequired)) {
@@ -31,7 +31,7 @@ if (!is_array($accountInfo)) {
             die("Failed to connect to the database: " . mysqli_connect_error());
         }
     }
-    
+
     unset($config);
 }
 

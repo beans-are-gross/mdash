@@ -14,13 +14,13 @@ require_once "/var/www/mdash/header.php";
             }
             ?>
             <p class="secondary">Do not put http:// or https:// in the link.</p>
-            <form>
+            <form id="modules-form">
                 <div id="module-fields">
                 </div>
                 <button type="button" id="add-link">Add Link</button>
                 <script src="./script.js"></script>
                 <div class="center">
-                    <button type="submit">Update Modules</button>
+                    <button type="submit" id="modules-form-submit">Update Modules</button>
                     <button type="button" onclick="window.location.href= '../';">Back </button>
                 </div>
             </form>
