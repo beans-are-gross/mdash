@@ -22,7 +22,7 @@ parse_str(implode('&', array_slice($argv, 1)), $_GET);
 // +============+
 // | Root Check |
 // +============+
-$docker = isset($_GET["docker"]) ? true : false;
+$docker = isset($_GET["docker"]);
 
 if (!$docker) {
     if (posix_geteuid() !== 0) {
@@ -253,7 +253,7 @@ blueResponse("Adding the encrypted mDash database password for the config file."
 $configJson["dbData"] = ["dbHost" => $dbHost, "dbUser" => $dbUser, "dbPass" => $encryptedDbPass, "dbDatabase" => "mdash"];
 greenResponse("Added the encrypted mDash database password for the config file successfully.");
 
-$config["docker"] = "$docker";
+$config["docker"] = $docker;
 
 blueResponse("Generating the JSON for the config file.");
 $configJson = json_encode($configJson);
