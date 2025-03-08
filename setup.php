@@ -85,7 +85,7 @@ greenResponse("Successfully moved mDash webpage files to /var/www/mdash/.");
 // | Install and setup Caddy, xcaddy, and go |
 // +=========================================+
 
-blueResponse("Installing Caddy. This might take a few seconds to complete.");
+blueResponse("Installing Caddy. This might take a minute to complete.");
 shell_exec("apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl");
 shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");        //caddy
 shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");                         //caddy
