@@ -126,6 +126,18 @@ greenResponse("Successfully changed Caddyfile access.");
 shell_exec('systemctl reload caddy');
 greenResponse("Set up Caddy configuration successfully.");
 
+if (!$docker) {
+    blueResponse("Giving the PHP user permissions to install modules.");
+    $sudoers = file_get_contents("/etc/sudoers");
+    $sudoers .= "\n\n %caddy cms051=/usr/bin/dpkg-divert --divert /usr/bin/caddy.default --rename /usr/bin/caddy";
+    $sudoers .= "\n %caddy cms051=/usr/bin/mv ./caddy /usr/bin/caddy.custom";
+    $sudoers .= "\n %caddy cms051=/usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.default 10";
+    $sudoers .= "\n %caddy cms051=/usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.custom 50";
+    $sudoers .= "\n %caddy cms051=/usr/bin/systemctl reload caddy";
+    file_put_contents("/etc/sudoers", $sudoers);
+    greenResponse("Successfully gave the PHP user permissions.");
+}
+
 // +================+
 // | Setup database |
 // +================+
