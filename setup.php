@@ -227,7 +227,7 @@ if (!$createTokenTableQuery) {
 
 if (!$docker) {
     blueResponse("Creating the module table.");
-    $createModuleTableQuery = mysqli_query($dbConn, "CREATE TABLE IF NOT EXISTS `mdash`.`modules` ( `id` VARCHAR(255) NOT NULL AUTO_INCREMENT, `url`  VARCHAR(1000) NOT NULL , PRIMARY KEY (`id`));");
+    $createModuleTableQuery = mysqli_query($dbConn, "CREATE TABLE IF NOT EXISTS `mdash`.`modules` ( `id` INT NOT NULL AUTO_INCREMENT , `url`  VARCHAR(1000) NOT NULL , PRIMARY KEY (`id`));");
     if (!$createModuleTableQuery) {
         redResponse("Failed to create the module table. More info: " . mysqli_error($dbConn));
     } else {
