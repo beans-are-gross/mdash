@@ -50,6 +50,8 @@ services:
         networks:
             mdash:
                 ipv4_address: 172.220.0.5
+        ports:
+            - 3306:3306
         environment:
             - MYSQL_ROOT_HOST=%
             - MYSQL_ROOT_PASSWORD=<your-database-password>
