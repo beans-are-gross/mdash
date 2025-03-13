@@ -55,18 +55,30 @@ services:
             - MYSQL_ROOT_PASSWORD=<your-database-password>
         image: mysql
         restart: unless-stopped
-    mdash:
-        container_name: mdash-installer
+    mdash-php:
+        container_name: mdash-php
+        networks:
+            mdash:
+                ipv4_address: 172.220.0.10
+        ports:
+            - 9000:9000
+        volumes:
+            - mdash-root:/mdash/
+            - mdash-php:/var/www/
+        image: beansaregross/mdash-php
+    caddy:
+        container_name: mdash-caddy
         networks:
             - mdash
+        ports:
+            - 80:80
+            - 443:443
+            - 8080:8080
         volumes:
             - mdash-root:/mdash/
             - mdash-php:/var/www/
             - mdash-caddyfile:/etc/caddy/
-        environment:
-            - DB_PASS=<your-database-password>
-        image: beansaregross/mdash
-        restart: unless-stopped
+        image: caddy
 networks:
     mdash:
         external: true
