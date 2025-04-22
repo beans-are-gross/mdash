@@ -81,6 +81,27 @@ shell_exec("mkdir /var/www/");
 shell_exec("mv $pwd/mdash-caddy/ /var/www/mdash/");
 greenResponse("Successfully moved mDash webpage files to /var/www/mdash/.");
 
+blueResponse("Changing /mdash/ group to www-data.");
+shell_exec("chgrp -R www-data /mdash/");
+greenResponse("Successfully changed group.");
+
+if (!$docker) {
+    blueResponse("Changing /mdash/ group to www-data. (For modules)");
+    shell_exec("chgrp -R www-data /mdash/");
+    greenResponse("Successfully changed group.");
+
+    blueResponse("Changing /mdash/ permission to 770. (For modules)");
+    shell_exec("chmod -R 770 /mdash/");
+    greenResponse("Successfully changed permissions.");
+
+    blueResponse("Changing /var/www/ group to www-data. (For modules)");
+    shell_exec("chgrp -R www-data /var/www/");
+    greenResponse("Successfully changed group.");
+
+    blueResponse("Changing /var/www/ permission to 770. (For modules)");
+    shell_exec("chmod -R 770 /var/www/");
+    greenResponse("Successfully changed permissions.");
+}
 // +=========================================+
 // | Install and setup Caddy, xcaddy, and go |
 // +=========================================+
@@ -127,15 +148,15 @@ shell_exec('systemctl reload caddy');
 greenResponse("Set up Caddy configuration successfully.");
 
 if (!$docker) {
-    blueResponse("Giving the PHP user permissions to install modules.");
-    $sudoers = file_get_contents("/etc/sudoers");
-    $sudoers .= "\n\n %www-data cms051=/usr/bin/dpkg-divert --divert /usr/bin/caddy.default --rename /usr/bin/caddy";
-    $sudoers .= "\n %www-data cms051=/usr/bin/mv ./caddy /usr/bin/caddy.custom";
-    $sudoers .= "\n %www-data cms051=/usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.default 10";
-    $sudoers .= "\n %www-data cms051=/usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.custom 50";
-    $sudoers .= "\n %www-data cms051=/usr/bin/systemctl reload caddy";
-    file_put_contents("/etc/sudoers", $sudoers);
-    greenResponse("Successfully gave the PHP user permissions.");
+    blueResponse("Updating sudoers file to give the caddy user moving permissions. (For modules)");
+
+    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /bin/bash/dpkg-divert --divert /usr/bin/caddy.default --rename /usr/bin/caddy' >> /etc/sudoers");
+    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /bin/bash/mv ./caddy /usr/bin/caddy.custom' >> /etc/sudoers");
+    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /bin/bash/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.default 10' >> /etc/sudoers");
+    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /bin/bash/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.custom 50' >> /etc/sudoers");
+    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /bin/bash/systemctl reload caddy' >> /etc/sudoers");
+
+    greenResponse("Successfully updated permissions.");
 }
 
 // +================+

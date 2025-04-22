@@ -51,19 +51,19 @@ form {
 
 @keyframes hoverShow {
   0% {
-    transform: scale(1,1);
+    transform: scale(1, 1);
   }
   100% {
-    transform: scale(1.05,1.05);
+    transform: scale(1.05, 1.05);
   }
 }
 
 @keyframes hoverHide {
   0% {
-    transform: scale(1.05,1.05);
+    transform: scale(1.05, 1.05);
   }
   100% {
-    transform: scale(1,1);
+    transform: scale(1, 1);
   }
 }
 
@@ -241,15 +241,12 @@ button .material-symbols-rounded {
   display: grid;
 }
 .loader::before,
-.loader::after {    
-  content:"";
+.loader::after {
+  content: "";
   grid-area: 1/1;
-  --c:no-repeat radial-gradient(farthest-side,#25b09b 92%,#0000);
-  background: 
-    var(--c) 50%  0, 
-    var(--c) 50%  100%, 
-    var(--c) 100% 50%, 
-    var(--c) 0    50%;
+  --c: no-repeat radial-gradient(farthest-side, #25b09b 92%, #0000);
+  background: var(--c) 50% 0, var(--c) 50% 100%, var(--c) 100% 50%,
+    var(--c) 0 50%;
   background-size: 12px 12px;
   animation: l12 1s infinite;
 }
@@ -257,11 +254,13 @@ button .material-symbols-rounded {
   margin: 4px;
   filter: hue-rotate(45deg);
   background-size: 8px 8px;
-  animation-timing-function: linear
+  animation-timing-function: linear;
 }
 
-@keyframes l12 { 
-  100%{transform: rotate(.5turn)}
+@keyframes l12 {
+  100% {
+    transform: rotate(0.5turn);
+  }
 }
 
 #loader-container {
@@ -280,23 +279,24 @@ button .material-symbols-rounded {
 }
 
 .small {
-  transform: scale(.25,.25);
+  transform: scale(0.25, 0.25);
 }
 
-#error-container {
+#error-container,
+#info-container {
   position: fixed;
   top: -60px;
   left: 50%;
   transform: translate(-50%);
 
   width: max-content;
-  height: 50px;
+  height: max-content;
 
   background-color: rgba(128, 128, 128, 0.5);
   backdrop-filter: blur(10px);
 
   border-radius: 10px;
-  border: 2px solid rgba(255, 105, 97, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
 
   display: none;
   align-items: center;
@@ -305,9 +305,11 @@ button .material-symbols-rounded {
   padding: 10px;
 
   color: white;
+
+  z-index: 10;
 }
 
-@keyframes showError {
+@keyframes showPopup {
   0% {
     opacity: 0;
     top: -60px;
@@ -318,7 +320,7 @@ button .material-symbols-rounded {
   }
 }
 
-@keyframes hideError {
+@keyframes hidePopup {
   0% {
     opacity: 1;
     top: 10px;
@@ -329,20 +331,23 @@ button .material-symbols-rounded {
   }
 }
 
-#error-container .material-symbols-rounded {
+#error-container .material-symbols-rounded,
+#info-container .material-symbols-rounded {
   border-radius: 100px;
 
   font-size: 50px;
-
-  background-color: #FF6961;
   color: white;
+}
+
+#error-container .material-symbols-rounded{
+  background-color: #ff6961;
 }
 
 #error-container div {
   margin-left: 20px;
 }
 
-#error-header, 
+#error-header,
 #error-message {
   margin: 0;
 }

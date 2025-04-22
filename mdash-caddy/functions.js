@@ -43,13 +43,13 @@ function addReveal(button, field) {
 
 function showError(header, message, disappear){
   document.getElementById("error-container").style.display = "flex";
-  document.getElementById("error-container").style.animation = "showError .5s forwards";
+  document.getElementById("error-container").style.animation = "showPopup .5s forwards";
   document.getElementById("error-header").textContent = header;
   document.getElementById("error-message").innerHTML = message;
 
   if(disappear !== 0){
     setTimeout(() => {
-      document.getElementById("error-container").style.animation = "hideError .5s forwards";
+      document.getElementById("error-container").style.animation = "hidePopup .5s forwards";
       setTimeout(() => {
         document.getElementById("error-container").style.display = "none";
       }, 500);

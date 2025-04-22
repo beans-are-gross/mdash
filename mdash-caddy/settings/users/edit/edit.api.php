@@ -3,14 +3,14 @@ $dbConnRequired = true;
 $noHtml = true;
 require_once "/var/www/mdash/header.php";
 
+//set output to json
+header("Content-Type: application/json");
+
 //check if the user is an admin
 if (!verifyAdmin($accountInfo[0])) {
     echo json_encode(["error" => "You do not have permission to complete this task."]);
     exit;
 }
-
-//set output to json
-header("Content-Type: application/json");
 
 //get the post data from javascript fetch
 $payload = file_get_contents("php://input");
@@ -54,7 +54,7 @@ if (isset($data["nickname"]) && isset($data["username"]) && isset($data["passwor
 
     if (!empty(trim($data["password"], " "))) {
         $password = password_hash($data["password"], PASSWORD_BCRYPT);
-        
+
         //update the data in the database
         $sql = "UPDATE `accounts` SET `nickname` = ?, `username` = ?, `password` = ?, `admin` = ? WHERE `id` = ?;";
         $stmt = mysqli_stmt_init($dbConn);

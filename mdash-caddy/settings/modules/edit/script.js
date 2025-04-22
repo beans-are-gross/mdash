@@ -38,6 +38,10 @@ function deleteLink(id) {
 document.getElementById("modules-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
+  document.getElementById("info-container").style.display = "flex";
+  document.getElementById("info-container").style.animation =
+    "showPopup .5s forwards";
+
   let submit = document.getElementById("modules-form-submit");
   submit.innerHTML = "<div class='loader small'></div> Update Modules";
   submit.disabled = true;
@@ -52,7 +56,11 @@ document.getElementById("modules-form").addEventListener("submit", (e) => {
       let httpsRegex = /^https?:\/\//gm;
 
       if (httpsRegex.test(moduleUrl)) {
-        showError("Module " + module + " URL", "Do not enter http:// or https://.", 5000);
+        showError(
+          "Module " + module + " URL",
+          "Do not enter http:// or https://.",
+          5000
+        );
         return;
       } else {
         modules += moduleUrl + ",";
@@ -81,9 +89,21 @@ document.getElementById("modules-form").addEventListener("submit", (e) => {
       if (json["success"]) {
         window.location.href = "/settings/modules/";
       } else if (json["error"] !== undefined) {
-        showError("Error", json["error"], 5000);
+        document.getElementById("info-container").style.animation =
+          "hidePopup .5s forwards";
+        setTimeout(() => {
+          document.getElementById("info-container").style.display = "none";
+
+          showError("Error", json["error"], 5000);
+        }, 500);
       } else {
-        showError("Invald Response", JSON.stringify(json), 5000);
+        document.getElementById("info-container").style.animation =
+          "hidePopup .5s forwards";
+        setTimeout(() => {
+          document.getElementById("info-container").style.display = "none";
+
+          showError("Invald Response", JSON.stringify(json), 5000);
+        }, 500);
       }
     });
 
