@@ -77,8 +77,8 @@ shell_exec("mv $pwd/mdash-root/* /mdash/");
 greenResponse("Successfully moved mdash root files to root directory.");
 
 blueResponse("Moving mDash webpage files to /var/www/mdash/.");
-shell_exec("mkdir /var/www/");
-shell_exec("mv $pwd/mdash-caddy/ /var/www/mdash/");
+shell_exec("mkdir /var/www/ && mkdir /var/www/mdash");
+shell_exec("mv $pwd/mdash-caddy/* /var/www/mdash/");
 greenResponse("Successfully moved mDash webpage files to /var/www/mdash/.");
 
 blueResponse("Changing /mdash/ group to www-data.");
@@ -200,40 +200,6 @@ blueResponse("Selecting the mDash database.");
 mysqli_select_db($dbConn, "mdash");
 greenResponse("Selected the mDash database successfully.");
 
-blueResponse("Checking for an old mDash user.");
-$dbUser = "mdash_php";
-$checkIfUserExistsQuery = mysqli_query($dbConn, "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$dbUser');");
-if (!$checkIfUserExistsQuery) {
-    redResponse("Failed to check if an old mDash user existed. More info: " . mysqli_error($dbConn));
-} else {
-    if (mysqli_fetch_row($checkIfUserExistsQuery)[0] === "0") {
-        greenResponse("No old mDash user found.");
-        blueResponse("Creating the mDash user.");
-
-        $userIp = $docker ? "172.220.0.10" : "127.0.0.1";
-
-        $createUserQuery = mysqli_query($dbConn, "CREATE USER IF NOT EXISTS `mdash_php`@`$userIp` IDENTIFIED WITH caching_sha2_password BY '$dbGeneratedPass';");
-
-        if (!$createUserQuery) {
-            redResponse("Failed to create mDash user. More info: " . mysqli_error($dbConn));
-        } else {
-            greenResponse("Created the mDash user successfully.");
-        }
-    } else {
-        redResponse("An old mDash user was detected. The script has exited to prevent complete data loss.");
-    }
-
-    mysqli_free_result($checkIfUserExistsQuery);
-}
-
-blueResponse("Granting the mDash user the necessary privileges.");
-$grantUserQuery = mysqli_query($dbConn, "GRANT SELECT, INSERT, UPDATE, DELETE ON  `mdash`.* TO `mdash_php`@`$userIp`;");
-if (!$grantUserQuery) {
-    redResponse("Failed to grant mDash user privileges. More info: " . mysqli_error($dbConn));
-} else {
-    greenResponse("Granted the mDash user the necessary privileges successfully.");
-}
-
 blueResponse("Creating the user account table.");
 $createUserAccountTableQuery = mysqli_query($dbConn, "CREATE TABLE IF NOT EXISTS `mdash`.`accounts` ( `id` INT NOT NULL AUTO_INCREMENT , `nickname` VARCHAR(255) NOT NULL , `username` VARCHAR(255) NOT NULL , `password` VARCHAR(255) NOT NULL , `admin` VARCHAR(255) NOT NULL , PRIMARY KEY (`id`))");
 if (!$createUserAccountTableQuery) {
@@ -266,6 +232,40 @@ if (!$docker) {
     } else {
         greenResponse("Created the module table successfully.");
     }
+}
+
+blueResponse("Checking for an old mDash user.");
+$dbUser = "mdash_php";
+$checkIfUserExistsQuery = mysqli_query($dbConn, "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$dbUser');");
+if (!$checkIfUserExistsQuery) {
+    redResponse("Failed to check if an old mDash user existed. More info: " . mysqli_error($dbConn));
+} else {
+    if (mysqli_fetch_row($checkIfUserExistsQuery)[0] === "0") {
+        greenResponse("No old mDash user found.");
+        blueResponse("Creating the mDash user.");
+
+        $userIp = $docker ? "172.220.0.10" : "127.0.0.1";
+
+        $createUserQuery = mysqli_query($dbConn, "CREATE USER IF NOT EXISTS `mdash_php`@`$userIp` IDENTIFIED WITH caching_sha2_password BY '$dbGeneratedPass';");
+
+        if (!$createUserQuery) {
+            redResponse("Failed to create mDash user. More info: " . mysqli_error($dbConn));
+        } else {
+            greenResponse("Created the mDash user successfully.");
+            
+            blueResponse("Granting the mDash user the necessary privileges.");
+            $grantUserQuery = mysqli_query($dbConn, "GRANT SELECT, INSERT, UPDATE, DELETE ON  `mdash`.* TO `mdash_php`@`$userIp`;");
+            if (!$grantUserQuery) {
+                redResponse("Failed to grant mDash user privileges. More info: " . mysqli_error($dbConn));
+            } else {
+                greenResponse("Granted the mDash user the necessary privileges successfully.");
+            }
+        }
+    } else {
+        redResponse("An old mDash user was detected. The script has exited. (If you are updating mDash, this is a good error.)");
+    }
+
+    mysqli_free_result($checkIfUserExistsQuery);
 }
 
 blueResponse("Encrypting the mDash database password for the config file.");
