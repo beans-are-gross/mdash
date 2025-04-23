@@ -37,9 +37,8 @@ $branch = isset($_GET["testing"]) ? "-b testing" : "";
 
 echo "\033[94mmDash Update Script\033[0m\n";
 
-blueResponse("Clearing update folder if it exists.");
-shell_exec("[[ -d '/mdash-updater/' ]] && rm -r /mdash-updater/");
-shell_exec("mkdir /mdash-updater/");
+blueResponse("Clearing update folder if it exists. (It is ok to see an error below this.)");
+shell_exec("rm -r /mdash-updater/");
 greenResponse("Successfully cleared update folder.");
 
 blueResponse("Downloading update.");
