@@ -53,3 +53,7 @@ greenResponse("Successfully moved mdash root files to root directory.");
 blueResponse("Moving mDash webpage files to /var/www/mdash/.");
 shell_exec("mv $pwd/mdash-caddy/ /var/www/mdash/");
 greenResponse("Successfully moved mDash webpage files to /var/www/mdash/.");
+
+blueResponse("Changing /mdash/ group to www-data.");
+shell_exec("chgrp -R www-data /mdash/");
+greenResponse("Successfully changed group.");
