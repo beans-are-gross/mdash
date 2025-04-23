@@ -106,7 +106,7 @@ if (!$docker) {
 // | Install and setup Caddy, xcaddy, and go |
 // +=========================================+
 
-blueResponse("Installing Caddy. This might take a minute to complete.");
+blueResponse("Installing Caddy. This might take a minute to complete. (Ignore any questions asked.)");
 shell_exec("apt-get install debian-keyring debian-archive-keyring apt-transport-https curl -y");
 shell_exec("yes 2>/dev/null | curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");        //caddy
 shell_exec("yes 2>/dev/null | curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");                         //caddy
@@ -162,23 +162,6 @@ if (!$docker) {
 // +================+
 // | Setup database |
 // +================+
-
-$configJson = [];
-
-blueResponse("Generating the cipher information.");
-$cipher = "aes-256-ctr";
-$encryptionKey = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(32 / strlen($x)))), 1, 32);
-$options = 0;
-$iv = rand(1000000000000000, 9999999999999999);
-greenResponse("Generated the cipher information successfully.");
-
-blueResponse("Adding the cipher information to the config file.");
-$configJson["encryption"] = ["cipher" => $cipher, "key" => $encryptionKey, "options" => $options, "iv" => $iv];
-greenResponse("Added the cipher information to the config file successfully.");
-
-blueResponse("Generating the database password for mDash.");
-$dbGeneratedPass = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(32 / strlen($x)))), 1, 32);
-greenResponse("Generated the database password for mDash successfully.");
 
 blueResponse("Connecting to database using the provided password.");
 $dbConn = mysqli_connect($dbHost, "root", $dbPass);
@@ -268,6 +251,23 @@ if (!$checkIfUserExistsQuery) {
     mysqli_free_result($checkIfUserExistsQuery);
 }
 
+$configJson = [];
+
+blueResponse("Generating the cipher information.");
+$cipher = "aes-256-ctr";
+$encryptionKey = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(32 / strlen($x)))), 1, 32);
+$options = 0;
+$iv = rand(1000000000000000, 9999999999999999);
+greenResponse("Generated the cipher information successfully.");
+
+blueResponse("Adding the cipher information to the config file.");
+$configJson["encryption"] = ["cipher" => $cipher, "key" => $encryptionKey, "options" => $options, "iv" => $iv];
+greenResponse("Added the cipher information to the config file successfully.");
+
+blueResponse("Generating the database password for mDash.");
+$dbGeneratedPass = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(32 / strlen($x)))), 1, 32);
+greenResponse("Generated the database password for mDash successfully.");
+
 blueResponse("Encrypting the mDash database password for the config file.");
 $encryptedDbPass = openssl_encrypt(
     $dbGeneratedPass,
@@ -296,11 +296,10 @@ blueResponse("Writing the JSON to the config file.");
 file_put_contents("/mdash/config.json", $configJson);
 greenResponse("Wrote the JSON to the config file successfully.");
 
-$ip = str_replace("\n", "", shell_exec("hostname -i"));
-
 if ($docker) {
     echo "\033[94mmDash Setup Script Complete\033[0m\n";
     exit(143); //Graceful termination (SIGTERM)
 } else {
+    $ip = str_replace("\n", "", shell_exec("hostname -i"));
     echo "\033[94mmDash Setup Script Complete\nEnjoy at: {$ip}:8080\033[0m\n";
 }
