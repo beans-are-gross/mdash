@@ -106,12 +106,12 @@ if (!$docker) {
 // | Install and setup Caddy, xcaddy, and go |
 // +=========================================+
 
-blueResponse("Installing Caddy. This might take a minute to complete. (Ignore any questions asked.)");
+blueResponse("Installing Caddy. This might take a minute to complete. (Please answer yes to the questions asked.)");
 shell_exec("apt-get install debian-keyring debian-archive-keyring apt-transport-https curl -y");
-shell_exec("yes 2>/dev/null | curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");        //caddy
-shell_exec("yes 2>/dev/null | curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");                         //caddy
-shell_exec("yes 2>/dev/null | curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg");   //xcaddy
-shell_exec("yes 2>/dev/null | curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list");                    //xcaddy
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");        //caddy
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");                         //caddy
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg");   //xcaddy
+shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list");                    //xcaddy
 shell_exec("apt-get update && apt-get install caddy xcaddy golang-go -y");
 greenResponse("Successfully installed Caddy.");
 
