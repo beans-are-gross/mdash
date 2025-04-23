@@ -42,7 +42,7 @@ shell_exec("[[ -d '/mdash-updater/' ]] && rm -r /mdash-updater/");
 shell_exec("mkdir /mdash-updater/");
 greenResponse("Successfully cleared update folder.");
 
-blueResponse("Downloading update");
+blueResponse("Downloading update.");
 shell_exec("git clone https://github.com/beans-are-gross/mdash $branch /mdash-updater/");
 greenResponse("Successfully downloaded update.");
 
