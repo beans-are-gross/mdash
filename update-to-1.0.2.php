@@ -43,7 +43,7 @@ shell_exec("mkdir /mdash-updater/");
 greenResponse("Successfully cleared update folder.");
 
 blueResponse("Downloading update");
-shell_exec("cd /mdash-updater/ && git clone https://github.com/beans-are-gross/mdash $branch");
+shell_exec("git clone https://github.com/beans-are-gross/mdash $branch /mdash-updater/");
 greenResponse("Successfully downloaded update.");
 
 blueResponse("Moving mDash root files to root directory.");
