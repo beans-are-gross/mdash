@@ -71,8 +71,10 @@ $ask = readline("Please select what you would like to do: \n 1. Install \n 2. Up
 
 if($ask == "1"){
     greenResponse("Installing mDash");
+    $update = false;
 } else if ($ask == 2) {
     greenResponse("Updating mDash");
+    $update = true;
 } else {
     redResponse("Answer '$ask' is invalid, please run the command again and respond with a valid answer.");
 }
@@ -82,11 +84,24 @@ if($ask == "1"){
 // | File Setup |
 // +============+
 
-blueResponse("Moving mDash root files to root directory.");
 $pwd = str_replace("\n", "", shell_exec("pwd"));
+
+if($update) {
+    blueResponse("Moving mDash config file to root directory.");
+    shell_exec("mv /mdash/config.json /mdash-config.json");
+    greenResponse("Successfully moved mDash config file to root directory.");
+}
+
+blueResponse("Moving mDash root files to root directory.");
 shell_exec("mkdir /mdash/");
 shell_exec("mv $pwd/mdash-root/* /mdash/");
-greenResponse("Successfully moved mdash root files to root directory.");
+greenResponse("Successfully moved mDash root files to root directory.");
+
+if($update) {
+    blueResponse("Moving mDash config file to /mdash/ directory.");
+    shell_exec("mv /mdash-config.json /mdash/config.json");
+    greenResponse("Successfully moved mDash config file to /mdash/ directory.");
+}
 
 blueResponse("Moving mDash webpage files to /var/www/mdash/.");
 shell_exec("mkdir /var/www/ && mkdir /var/www/mdash");
@@ -229,6 +244,12 @@ if (!$docker) {
     }
 }
 
+if($update){
+    $ip = str_replace("\n", "", shell_exec("hostname -i"));
+    echo "\033[94mmDash Setup Script Complete\nEnjoy at: {$ip}:8080\033[0m\n";
+    exit;
+}
+
 blueResponse("Checking for an old mDash user.");
 $dbUser = "mdash_php";
 $checkIfUserExistsQuery = mysqli_query($dbConn, "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$dbUser');");
@@ -257,7 +278,7 @@ if (!$checkIfUserExistsQuery) {
             }
         }
     } else {
-        redResponse("An old mDash user was detected. The script has exited. (If you are updating mDash, this is a good error.)");
+        redResponse("An old mDash user was detected. The script has exited.");
     }
 
     mysqli_free_result($checkIfUserExistsQuery);
