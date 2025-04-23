@@ -35,20 +35,22 @@ if (posix_geteuid() !== 0) {
 
 $branch = isset($_GET["testing"]) ? "-b testing" : "";
 
-shell_exec("rm -r /mdash-updater/ && mkdir /mdash-updater/");
+echo "\033[94mmDash Update Script\033[0m\n";
+
+blueResponse("Clearing update folder if it exists.");
+shell_exec("[[ -d '/mdash-updater/' ]] && rm -r /mdash-updater/");
+shell_exec("mkdir /mdash-updater/");
+greenResponse("Successfully cleared update folder.");
+
+blueResponse("Downloading update");
 shell_exec("cd /mdash-updater/ && git clone https://github.com/beans-are-gross/mdash $branch");
+greenResponse("Successfully downloaded update.");
 
 blueResponse("Moving mDash root files to root directory.");
 $pwd = "/mdash-updater";
-shell_exec("mkdir /mdash/");
 shell_exec("mv $pwd/mdash-root/* /mdash/");
 greenResponse("Successfully moved mdash root files to root directory.");
 
 blueResponse("Moving mDash webpage files to /var/www/mdash/.");
-shell_exec("mkdir /var/www/");
 shell_exec("mv $pwd/mdash-caddy/ /var/www/mdash/");
 greenResponse("Successfully moved mDash webpage files to /var/www/mdash/.");
-
-blueResponse("Changing /mdash/ group to www-data.");
-shell_exec("chgrp -R www-data /mdash/");
-greenResponse("Successfully changed group.");
