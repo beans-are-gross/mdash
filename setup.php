@@ -23,6 +23,7 @@ parse_str(implode('&', array_slice($argv, 1)), $_GET);
 // | Root Check |
 // +============+
 $docker = isset($_GET["docker"]);
+$update = isset($_GET["update"]);
 
 if (!$docker) {
     if (posix_geteuid() !== 0) {
@@ -64,7 +65,18 @@ if (!isset($_GET["db_pass"])) {
     $dbPass = $_GET["db_pass"];
 }
 
-echo "\033[94mmDash Setup Script\033[0m\n";
+echo "\033[94mmDash Script\033[0m\n";
+
+$ask = readline("Please select what you would like to do: \n 1. Install \n 2. Update \n >");
+
+if($ask == "1"){
+    greenResponse("Installing mDash");
+} else if ($ask == 2) {
+    greenResponse("Updating mDash");
+} else {
+    redResponse("Answer '$ask' is invalid, please run the command again and respond with a valid answer.");
+}
+
 
 // +============+
 // | File Setup |
