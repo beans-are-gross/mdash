@@ -90,7 +90,7 @@ $pwd = str_replace("\n", "", shell_exec("pwd"));
 
 if ($update) {
     blueResponse("Moving mDash config file to root directory.");
-    shell_exec("mv /mdash/config.json /mdash-config.json");
+    shell_exec("mv /mdash/config.json /mdash-config-copy.json");
     greenResponse("Successfully moved mDash config file to root directory.");
 }
 
@@ -251,7 +251,7 @@ if (!$docker) {
 if ($update) {
     if ($update) {
         blueResponse("Moving mDash config file to /mdash/ directory.");
-        shell_exec("mv /mdash-config.json /mdash/config.json");
+        shell_exec("cp /mdash-config-copy.json /mdash/config.json");
         greenResponse("Successfully moved mDash config file to /mdash/ directory.");
     }
 
