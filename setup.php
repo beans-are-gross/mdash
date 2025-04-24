@@ -185,14 +185,11 @@ greenResponse("Successfully changed Caddyfile access.");
 shell_exec('systemctl reload caddy');
 greenResponse("Set up Caddy configuration successfully.");
 
-if (!$docker) {
+if (!$docker && !$update) {
     blueResponse("Updating sudoers file to give the caddy user moving permissions. (For modules)");
 
-    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /usr/bin/dpkg-divert --divert /usr/bin/caddy.default --rename /usr/bin/caddy' >> /etc/sudoers");
-    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /usr/bin/mv ./caddy /usr/bin/caddy.custom' >> /etc/sudoers");
-    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.default 10' >> /etc/sudoers");
-    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.custom 50' >> /etc/sudoers");
-    shell_exec("echo '%caddy ALL=(ALL) NOPASSWD: /usr/bin/systemctl reload caddy' >> /etc/sudoers");
+    shell_exec("usermod -aG sudo caddy");
+    shell_exec("echo 'www-data ALL=NOPASSWD: /usr/bin/dpkg-divert --divert /usr/bin/caddy.default --rename /usr/bin/caddy, /usr/bin/mv ./caddy /usr/bin/caddy.custom, /usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.default 10, /usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.custom 50, /usr/bin/systemctl reload caddy' >> /etc/sudoers");
 
     greenResponse("Successfully updated permissions.");
 }

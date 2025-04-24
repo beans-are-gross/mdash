@@ -47,6 +47,8 @@ document.getElementById("modules-form").addEventListener("submit", (e) => {
   submit.disabled = true;
   submit.style.cursor = "not-allowed";
 
+  let stop = false;
+
   let modules = "";
   linkIds.forEach((module) => {
     let moduleUrl = document.getElementById("module-" + module).value;
@@ -61,12 +63,14 @@ document.getElementById("modules-form").addEventListener("submit", (e) => {
           "Do not enter http:// or https://.",
           5000
         );
-        return;
+        stop = true;
       } else {
         modules += moduleUrl + ",";
       }
     }
   });
+
+  if(stop == true) return;
 
   //get the mdash-token cookie to pass to the api
   let cookies = document.cookie;
