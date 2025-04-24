@@ -67,7 +67,10 @@ if (!isset($_GET["db_pass"])) {
 echo "\033[94mmDash Script\033[0m\n";
 
 if (!$docker) {
-    $ask = readline("Please select what you would like to do: \n 1. Install \n 2. Update \n >");
+    echo "Please select what you would like to do:\n";
+    echo "1. Install\n";
+    echo "2. Update\n";
+    $ask = readline(">");
     if ($ask == "1") {
         greenResponse("Installing mDash");
         $update = false;
