@@ -263,7 +263,7 @@ if ($update) {
     }
 
     $ip = str_replace("\n", "", shell_exec("hostname -i"));
-    echo "\033[94mmDash Setup Script Complete\nEnjoy at: {$ip}:8080\033[0m\n";
+    echo "\033[94mmDash Update Script Complete\nEnjoy at: {$ip}:8080\033[0m\n";
     exit;
 }
 
