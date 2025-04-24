@@ -188,7 +188,7 @@ greenResponse("Set up Caddy configuration successfully.");
 if (!$docker && !$update) {
     blueResponse("Updating sudoers file to give the caddy user moving permissions. (For modules)");
 
-    shell_exec("usermod -aG sudo caddy");
+    shell_exec("usermod -aG sudo www-data");
     shell_exec("echo 'www-data ALL=(ALL) NOPASSWD: /usr/bin/dpkg-divert --divert /usr/bin/caddy.default --rename /usr/bin/caddy, /usr/bin/mv ./caddy /usr/bin/caddy.custom, /usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.default 10, /usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.custom 50, /usr/bin/systemctl reload caddy' >> /etc/sudoers");
 
     greenResponse("Successfully updated permissions.");

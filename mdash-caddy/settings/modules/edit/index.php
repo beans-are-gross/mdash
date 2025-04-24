@@ -10,7 +10,7 @@ require_once "/var/www/mdash/header.php";
                 <span class='material-symbols-rounded' style="background-color: #ff964f;">restart_alt</span>
                 <h3 style="padding-left: 10px;">Please Wait</h3>
             </div>
-            <p class='secondary'>This will take a few minutes. <br> Caddy will reboot soon.</p>
+            <p class='secondary'>This will take a few minutes. <br> Log: <span id='log-info'></span></p>
         </div>
     </div>
     <div class="darken">

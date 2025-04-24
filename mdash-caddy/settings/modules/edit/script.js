@@ -35,12 +35,33 @@ function deleteLink(id) {
   linkIds = linkIds.filter((linkId) => linkId !== id);
 }
 
+function updateInfoPopup(){
+  let cookies = document.cookie;
+  cookies = cookies.split(";");
+  let mdashToken = cookies.find((c) => c.trim().startsWith("mdash-token="));
+  mdashToken = mdashToken.split("=")[1];
+
+  fetch("edit.api.php", {
+    method: "POST",
+    body: JSON.stringify({
+      modules: modules,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      Cookie: "mdash-token=" + mdashToken,
+    },
+  })
+    .then((response) => document.getElementById("log-info").textContent(response));
+}
+
 document.getElementById("modules-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
   document.getElementById("info-container").style.display = "flex";
   document.getElementById("info-container").style.animation =
     "showPopup .5s forwards";
+
+  setInterval(updateInfoPopup, 1000);
 
   let submit = document.getElementById("modules-form-submit");
   submit.innerHTML = "<div class='loader small'></div> Update Modules";
@@ -70,7 +91,13 @@ document.getElementById("modules-form").addEventListener("submit", (e) => {
     }
   });
 
-  if(stop == true) return;
+  if(stop == true) {
+    submit.innerHTML = "Update Modules";
+    submit.disabled = false;
+    submit.style.cursor = "pointer";
+
+    return;
+  }
 
   //get the mdash-token cookie to pass to the api
   let cookies = document.cookie;
