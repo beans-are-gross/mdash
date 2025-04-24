@@ -67,7 +67,9 @@ if (!isset($_GET["db_pass"])) {
 
 system("clear");
 
-echo "\033[94mmDash Script\033[0m\n";
+echo "\033[94m +--------------+ \033[0m\n";
+echo "\033[94m | mDash Script | \033[0m\n";
+echo "\033[94m +--------------+ \033[0m\n";
 
 if (!$docker) {
     echo "Please select what you would like to do:\n";
@@ -88,7 +90,6 @@ if (!$docker) {
 } else {
     $update = false;
 }
-
 
 // +============+
 // | File Setup |
