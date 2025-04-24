@@ -66,9 +66,9 @@ if (!isset($_GET["db_pass"])) {
 
 echo "\033[94mmDash Script\033[0m\n";
 
-if(!$docker){
+if (!$docker) {
     $ask = readline("Please select what you would like to do: \n 1. Install \n 2. Update \n >");
-    if($ask == "1"){
+    if ($ask == "1") {
         greenResponse("Installing mDash");
         $update = false;
     } else if ($ask == 2) {
@@ -88,26 +88,26 @@ if(!$docker){
 
 $pwd = str_replace("\n", "", shell_exec("pwd"));
 
-if($update) {
+if ($update) {
     blueResponse("Moving mDash config file to root directory.");
     shell_exec("mv /mdash/config.json /mdash-config.json");
     greenResponse("Successfully moved mDash config file to root directory.");
 }
 
 blueResponse("Moving mDash root files to root directory.");
-shell_exec("mkdir /mdash/");
-shell_exec("mv $pwd/mdash-root/* /mdash/");
+if ($update) {
+    shell_exec("rm -r /mdash/");
+}
+shell_exec("mkdir /mdash/ && mv $pwd/mdash-root/* /mdash/");
 greenResponse("Successfully moved mDash root files to root directory.");
 
-if($update) {
-    blueResponse("Moving mDash config file to /mdash/ directory.");
-    shell_exec("mv /mdash-config.json /mdash/config.json");
-    greenResponse("Successfully moved mDash config file to /mdash/ directory.");
-}
-
 blueResponse("Moving mDash webpage files to /var/www/mdash/.");
-shell_exec("mkdir /var/www/ && mkdir /var/www/mdash");
-shell_exec("mv $pwd/mdash-caddy/* /var/www/mdash/");
+if ($update) {
+    shell_exec("rm -r /var/www/mdash/");
+} else {
+    shell_exec("mkdir /var/www/");
+}
+shell_exec("mkdir /var/www/mdash && mv $pwd/mdash-caddy/* /var/www/mdash/");
 greenResponse("Successfully moved mDash webpage files to /var/www/mdash/.");
 
 blueResponse("Changing /mdash/ group to www-data.");
@@ -144,21 +144,23 @@ shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.
 shell_exec("apt-get update && apt-get install caddy xcaddy golang-go -y");
 greenResponse("Successfully installed Caddy.");
 
-blueResponse("Seting up Caddy configuration.");
-if ($docker) {
-    $caddyfile = ":8080 {\n" .
-        "   root * /var/www/mdash/\n" .
-        "   file_server\n" .
-        "   php_fastcgi 172.220.0.10:9000\n" .
-        "}\n\n";
-    file_put_contents("/etc/caddy/Caddyfile", $caddyfile);
-} else {
-    $caddyfile = ":8080 {\n" .
-        "   root * /var/www/mdash/\n" .
-        "   file_server\n" .
-        "   php_fastcgi unix//run/php/php-fpm.sock\n" .
-        "}\n\n";
-    file_put_contents("/etc/caddy/Caddyfile", $caddyfile);
+if (!$update) {
+    blueResponse("Seting up Caddy configuration.");
+    if ($docker) {
+        $caddyfile = ":8080 {\n" .
+            "   root * /var/www/mdash/\n" .
+            "   file_server\n" .
+            "   php_fastcgi 172.220.0.10:9000\n" .
+            "}\n\n";
+        file_put_contents("/etc/caddy/Caddyfile", $caddyfile);
+    } else {
+        $caddyfile = ":8080 {\n" .
+            "   root * /var/www/mdash/\n" .
+            "   file_server\n" .
+            "   php_fastcgi unix//run/php/php-fpm.sock\n" .
+            "}\n\n";
+        file_put_contents("/etc/caddy/Caddyfile", $caddyfile);
+    }
 }
 
 shell_exec("cd /etc/caddy/ && caddy fmt --overwrite");
@@ -246,7 +248,13 @@ if (!$docker) {
     }
 }
 
-if($update){
+if ($update) {
+    if ($update) {
+        blueResponse("Moving mDash config file to /mdash/ directory.");
+        shell_exec("mv /mdash-config.json /mdash/config.json");
+        greenResponse("Successfully moved mDash config file to /mdash/ directory.");
+    }
+
     $ip = str_replace("\n", "", shell_exec("hostname -i"));
     echo "\033[94mmDash Setup Script Complete\nEnjoy at: {$ip}:8080\033[0m\n";
     exit;
@@ -270,7 +278,7 @@ if (!$checkIfUserExistsQuery) {
             redResponse("Failed to create mDash user. More info: " . mysqli_error($dbConn));
         } else {
             greenResponse("Created the mDash user successfully.");
-            
+
             blueResponse("Granting the mDash user the necessary privileges.");
             $grantUserQuery = mysqli_query($dbConn, "GRANT SELECT, INSERT, UPDATE, DELETE ON  `mdash`.* TO `mdash_php`@`$userIp`;");
             if (!$grantUserQuery) {
