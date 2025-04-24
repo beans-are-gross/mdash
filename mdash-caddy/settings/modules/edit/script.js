@@ -41,17 +41,14 @@ function updateInfoPopup(){
   let mdashToken = cookies.find((c) => c.trim().startsWith("mdash-token="));
   mdashToken = mdashToken.split("=")[1];
 
-  fetch("edit.api.php", {
-    method: "POST",
-    body: JSON.stringify({
-      modules: modules,
-    }),
+  fetch("log.api.php", {
     headers: {
       "Content-type": "application/json; charset=UTF-8",
       Cookie: "mdash-token=" + mdashToken,
     },
   })
-    .then((response) => document.getElementById("log-info").textContent(response));
+    .then((response) => response.text())
+    .then((log) => document.getElementById("log-info").textContent = log);
 }
 
 document.getElementById("modules-form").addEventListener("submit", (e) => {
