@@ -64,6 +64,8 @@ if (!isset($_GET["db_pass"])) {
     $dbPass = $_GET["db_pass"];
 }
 
+system("clear");
+
 echo "\033[94mmDash Script\033[0m\n";
 
 if (!$docker) {
@@ -72,9 +74,11 @@ if (!$docker) {
     echo "2. Update\n";
     $ask = readline(">");
     if ($ask == "1") {
+        system("clear");
         greenResponse("Installing mDash");
         $update = false;
     } else if ($ask == 2) {
+        system("clear");
         greenResponse("Updating mDash");
         $update = true;
     } else {
