@@ -15,12 +15,13 @@ $nickname = decryptData($accountInfo[1]); ?>
     <div class="darken">
         <form id="update-account-form">
             <h1 style="margin: 0;">Settings</h1>
-            <p class="secondary">Version 1.0.2</p>
+            <p class="secondary">Version 1.1</p>
             <div class="center" style="margin-bottom: 20px;">
                 <button type="button" onclick="window.location.href = '../dashboard/';">Back</button>
                 <button type="button" onclick="window.location.href = './users/';">Users</button>
                 <button type="button" onclick="window.location.href = './tokens/';">Tokens</button>
                 <button type="button" onclick="window.location.href = './modules/';">Modules</button>
+                <button type="button" onclick="window.location.href = './custom-config/';">Custom Config</button>
                 <button type="button" onclick="window.location.href = './logout.php';">Log Out</button>
             </div>
 

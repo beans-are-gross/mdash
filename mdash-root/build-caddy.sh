@@ -23,4 +23,6 @@ sudo update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.default 1
 sudo update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.custom 50 >> build-caddy.log 2>&1
 sudo systemctl restart caddy >> build-caddy.log 2>&1
 
+echo "mDash: Success!" >> build-caddy.log 2>&1
+
 exit $exit_code

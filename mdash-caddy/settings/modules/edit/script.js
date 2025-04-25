@@ -48,7 +48,19 @@ function updateInfoPopup(){
     },
   })
     .then((response) => response.text())
-    .then((log) => document.getElementById("log-info").textContent = log);
+    .then((log) => {
+      let modulesLog = document.getElementById("modules-log");
+      modulesLog.innerHTML = log;
+
+      if(document.getElementById("auto-scroll").checked){
+        modulesLog.scrollTop = modulesLog.scrollHeight;
+      }
+
+      log = log.split("<br>");
+      if(log[log.length - 2] == "mDash: Success!"){
+        window.location.href = "/settings/modules/";
+      }
+    });
 }
 
 document.getElementById("modules-form").addEventListener("submit", (e) => {

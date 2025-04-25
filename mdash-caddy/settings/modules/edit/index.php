@@ -8,9 +8,15 @@ require_once "/var/www/mdash/header.php";
         <div>
             <div class="center">
                 <span class='material-symbols-rounded' style="background-color: #ff964f;">restart_alt</span>
-                <h3 style="padding-left: 10px;">Please Wait</h3>
+                <h3 style="padding-left: 10px;">Rebooting</h3>
             </div>
-            <p class='secondary'>This will take a few minutes. <br> Log: <span id='log-info'></span></p>
+            <link rel="stylesheet" href="./style.css">
+            <p class='secondary'>This will take a few minutes. <br>
+                <span id='modules-log'></span>
+                <br>
+                <input type="checkbox" id="auto-scroll" checked>
+                <label for="auto-scroll">Auto scroll</label>
+            </p>
         </div>
     </div>
     <div class="darken">
