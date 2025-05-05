@@ -27,7 +27,7 @@ $nickname = decryptData($accountInfo[1]);
                 <button onclick="window.location.href = './add/';">Add App</button>
                 <button onclick="window.location.href = '../settings/';">Settings</button>
             </div>
-            <div id="app-grid" class="app-grid">
+            <div id="app-grid">
                 <!-- Include the script here because the script needs 'app-grid' and the apps need the functions -->
                 <script src="./script.js"></script>
 

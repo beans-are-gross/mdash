@@ -4,15 +4,17 @@ require_once "/var/www/mdash/header.php";
 ?>
 
 <body>
+    <?php
+    require_once "/var/www/mdash/settings/header.php";
+    ?>
     <div id="info-container">
         <div>
             <div class="center">
                 <span class='material-symbols-rounded' style="background-color: #ff964f;">restart_alt</span>
                 <h3 style="padding-left: 10px;">Rebooting</h3>
             </div>
-            <link rel="stylesheet" href="./style.css">
             <p class='secondary'>This will take a few minutes. <br>
-                <span id='modules-log'></span>
+                <span id='modules-log' class="log"></span>
                 <br>
                 <input type="checkbox" id="auto-scroll" checked>
                 <label for="auto-scroll">Auto scroll</label>
@@ -53,6 +55,7 @@ require_once "/var/www/mdash/header.php";
                 }
                 mysqli_stmt_bind_result($stmt, $url);
                 while (mysqli_stmt_fetch($stmt)) {
+                    $url = decryptData($url);
                     echo "<script>addLink('$url')</script>";
                 }
                 ?>

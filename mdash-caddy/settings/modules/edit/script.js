@@ -68,7 +68,7 @@ document.getElementById("modules-form").addEventListener("submit", (e) => {
 
   document.getElementById("info-container").style.display = "flex";
   document.getElementById("info-container").style.animation =
-    "showPopup .5s forwards";
+    "infoShowPopup .5s forwards";
 
   setInterval(updateInfoPopup, 1000);
 
@@ -130,7 +130,7 @@ document.getElementById("modules-form").addEventListener("submit", (e) => {
         window.location.href = "/settings/modules/";
       } else if (json["error"] !== undefined) {
         document.getElementById("info-container").style.animation =
-          "hidePopup .5s forwards";
+          "infoHidePopup .5s forwards";
         setTimeout(() => {
           document.getElementById("info-container").style.display = "none";
 
@@ -138,7 +138,7 @@ document.getElementById("modules-form").addEventListener("submit", (e) => {
         }, 500);
       } else {
         document.getElementById("info-container").style.animation =
-          "hidePopup .5s forwards";
+          "infoHidePopup .5s forwards";
         setTimeout(() => {
           document.getElementById("info-container").style.display = "none";
 

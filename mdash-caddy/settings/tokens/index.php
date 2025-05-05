@@ -14,6 +14,9 @@ $accountId = $accountInfo[0];
 </head>
 
 <body>
+    <?php
+    require_once "/var/www/mdash/settings/header.php";
+    ?>
     <div class="darken">
         <div>
             <?php
@@ -25,9 +28,6 @@ $accountId = $accountInfo[0];
             }
             ?>
             <h1 style="margin: 0;">Tokens</h1>
-            <div class="center" style="margin-bottom: 20px;">
-                <button type="button" onclick="window.location.href = '../';">Back</button>
-            </div>
 
             <table>
                 <thead>
@@ -69,7 +69,7 @@ $accountId = $accountInfo[0];
 
                     while (mysqli_stmt_fetch($stmt)) {
                         $currentToken = "";
-                        if($_COOKIE["mdash-token"] == decryptData($tokenId))
+                        if ($_COOKIE["mdash-token"] == decryptData($tokenId))
                             $currentToken = "(Current)";
 
                         $tokenAccountId = decryptData($tokenAccountId);

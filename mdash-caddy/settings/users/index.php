@@ -14,6 +14,9 @@ $accountId = $accountInfo[0];
 </head>
 
 <body>
+    <?php
+    require_once "/var/www/mdash/settings/header.php";
+    ?>
     <div class="darken">
         <div>
             <?php
@@ -26,7 +29,6 @@ $accountId = $accountInfo[0];
             ?>
             <h1 style="margin: 0;">Users</h1>
             <div class="center" style="margin-bottom: 20px;">
-                <button type="button" onclick="window.location.href = '../';">Back</button>
                 <button type="button" onclick="window.location.href = './add';">Add a User</button>
             </div>
 

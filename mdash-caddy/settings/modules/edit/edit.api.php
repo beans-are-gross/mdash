@@ -35,6 +35,8 @@ if (isset($data["modules"])) {
         if (empty($module))
             continue;
 
+        $module = encryptData($module);
+
         $sql = "INSERT INTO `modules` (`url`) VALUES (?);";
         $stmt = mysqli_stmt_init($dbConn);
         mysqli_stmt_prepare($stmt, $sql);

@@ -10,6 +10,9 @@ require "/var/www/mdash/header.php";
 </head>
 
 <body>
+    <?php
+    require_once "/var/www/mdash/settings/header.php";
+    ?>
     <div class="darken">
         <form method="post" action="delete.api.php">
             <h1>Delete a User</h1>
@@ -20,7 +23,7 @@ require "/var/www/mdash/header.php";
                 $id = strip_tags($_GET["id"]);
                 $idDecrypted = decryptData($id);
 
-                if(!verifyAdmin($accountInfo[0])){
+                if (!verifyAdmin($accountInfo[0])) {
                     echo "<p class='secondary'>You do not have access to this page.</p>";
                     echo "<div class='center'><button type='button' onclick='window.history.back();'>Go back</p></div>";
                     exit;

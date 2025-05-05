@@ -16,6 +16,9 @@ $accountId = $accountInfo[0];
 </head>
 
 <body>
+    <?php
+    require_once "/var/www/mdash/settings/header.php";
+    ?>
     <div class="darken">
         <div id="container">
             <form id="add-form">

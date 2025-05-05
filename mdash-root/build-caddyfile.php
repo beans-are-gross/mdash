@@ -25,6 +25,13 @@ if (!$dbConn) {
     die("Failed to connect to the database: " . mysqli_connect_error());
 }
 
+$caddyfile = "";
+
+$customCaddyfile = "/mdash/custom.caddyfile";
+if (file_exists($customCaddyfile)) {
+    $caddyfile = file_get_contents($customCaddyfile) . "\n\n# end custom config\n\n";
+}
+
 $sql = "SELECT `int_url`, `int_url_ssl`, `ext_url` FROM apps;";
 $stmt = mysqli_stmt_init($dbConn);
 mysqli_stmt_prepare($stmt, $sql);
@@ -37,13 +44,13 @@ if (!$appQuery) {
 mysqli_stmt_bind_result($stmt, $intUrl, $intUrlSsl, $extUrl);
 
 if (isset($config["docker"])) {
-    $caddyfile = ":8080 {\n" .
+    $caddyfile .= ":8080 {\n" .
         "   root * /var/www/mdash/\n" .
         "   file_server\n" .
         "   php_fastcgi 172.220.0.10:9000\n" .
         "}\n\n";
 } else {
-    $caddyfile = ":8080 {\n" .
+    $caddyfile .= ":8080 {\n" .
         "   root * /var/www/mdash/\n" .
         "   file_server\n" .
         "   php_fastcgi unix//run/php/php-fpm.sock\n" .
