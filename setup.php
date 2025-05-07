@@ -28,8 +28,6 @@ $docker = isset($_GET["docker"]);
 if (!$docker) {
     if (posix_geteuid() !== 0) {
         redResponse("This script must be run as root. Please use 'sudo' to run the script.");
-    } else {
-        greenResponse("You are running this script as root.");
     }
 }
 
@@ -62,8 +60,6 @@ if (!isset($_GET["db_pass"])) {
 } else {
     $dbPass = $_GET["db_pass"];
 }
-
-system("clear");
 
 function initQuestion()
 {
@@ -100,6 +96,8 @@ function initQuestion()
 }
 
 if (!$docker) {
+    system("clear");
+
     $update = initQuestion();
     $dbPass = readline("> ");
 
