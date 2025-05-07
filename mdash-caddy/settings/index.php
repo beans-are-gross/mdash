@@ -9,6 +9,7 @@ $nickname = decryptData($accountInfo[1]); ?>
     require_once "/var/www/mdash/settings/header.php";
     ?>
     <div id="darken" class="darken">
+        <link rel="stylesheet" href="./settings-home.css">
         <form id="update-account-form">
             <?php
             //pull the user information

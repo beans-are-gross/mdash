@@ -8,6 +8,10 @@
   justify-content: right;
 }
 
+#system-info-grid {
+  display: grid;
+}
+
 .system-info-widget {
   width: max-content;
   padding: 10px;
@@ -29,6 +33,7 @@
 .system-info-widget p,
 .system-info-widget .material-symbols-rounded {
   text-align: left;
+  margin: 0;
 }
 
 .system-info-widget div{
