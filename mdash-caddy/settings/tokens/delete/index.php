@@ -10,6 +10,9 @@ require "/var/www/mdash/header.php";
 </head>
 
 <body>
+    <?php
+    require_once "/var/www/mdash/settings/header.php";
+    ?>
     <div class="darken">
         <form method="post" action="delete.api.php">
             <h1>Delete a Token</h1>

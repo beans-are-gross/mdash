@@ -1,13 +1,99 @@
 table {
-    background: rgba(128, 128, 128, 0.5);
-    backdrop-filter: blur(10px);
+  background: rgba(128, 128, 128, 0.5);
+  backdrop-filter: blur(10px);
 
-    padding: 10px;
+  padding: 10px;
 
-    border-radius: 15px;
+  border-radius: 15px;
+
+  display: block;
+  max-height: 50vh;
+  overflow: scroll;
 }
 
-th, td {
-    padding-left: 5px;
-    padding-right: 5px;
+th,
+td {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.darken {
+  width: 85vw;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.settings-nav {
+  background-color: #28282B;
+  display: flex;
+  justify-content: center;
+  width: 15vw;
+  max-width: 15vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.settings-header {
+    background-color: #1D1D20;
+    width: 15vw;
+    padding: 20px 0 20px 0; 
+}
+
+.settings-nav-buttons button{
+    width: 15vw;
+    border: none;
+    border-radius: 0px;
+    padding: 0;
+    margin: 0;
+    background-color: #28282B;
+}
+
+.settings-nav-buttons button:hover {
+    background-color: #3A3A41;
+}
+
+#info-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes infoShowPopup {
+  0% {
+    opacity: 0;
+    top: -60px;
+  }
+  100% {
+    opacity: 1;
+    top: 50%;
+  }
+}
+
+@keyframes infoHidePopup {
+  0% {
+    opacity: 1;
+    top: 50%;
+  }
+  100% {    
+    opacity: 0;
+    top: -60px;
+  }
+}
+
+.log{
+  margin: 0;
+  margin-top: 10px;
+  padding: 10px;
+  display: inline-block;
+  text-align: left;
+  height: 50vh;
+  width: 75vw;
+  overflow: scroll;
+  flex-direction: column-reverse;
+  background-color: rgba(0, 0, 0, .2);
+  border-radius: 10px;
 }

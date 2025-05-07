@@ -16,6 +16,9 @@ $accountId = $accountInfo[0];
 </head>
 
 <body>
+    <?php
+    require_once "/var/www/mdash/settings/header.php";
+    ?>
     <div class="darken">
         <div id="container">
             <form id="add-form">
@@ -59,7 +62,10 @@ $accountId = $accountInfo[0];
                     </button>
                 </div>
 
-                <button type="submit">Add User</button>
+                <div class="center">
+                    <button type="submit">Add User</button>
+                    <button type="button" onclick="window.location.href = '../';">Cancel</button>
+                </div>
             </form>
         </div>
     </div>

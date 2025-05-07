@@ -12,10 +12,12 @@ if (!is_array($accountInfo)) {
     setcookie("mdash-token", "", time() - 3600, "/");
     header("Location: /?$accountInfo");
 } else {
+    $config = json_decode(file_get_contents("/mdash/config.json"), true);
+    $docker = isset($config["docker"]);
+
     //check if the script wants a database connection
     if (isset($dbConnRequired)) {
         //connect to the database
-        $config = json_decode(file_get_contents("/mdash/config.json"), true);
         $dbInfo = $config["dbData"];
 
         $dbHost = $dbInfo["dbHost"];
@@ -28,9 +30,9 @@ if (!is_array($accountInfo)) {
         if (!$dbConn) {
             die("Failed to connect to the database: " . mysqli_connect_error());
         }
-
-        unset($config);
     }
+
+    unset($config);
 }
 
 //check if the script wants html

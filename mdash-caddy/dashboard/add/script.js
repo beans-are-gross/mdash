@@ -22,61 +22,54 @@ document.getElementById("add-form").addEventListener("submit", (e) => {
   if (name.trim() !== "") {
     let httpsRegex = /^https?:\/\//gm;
 
-    if (!httpsRegex.test(intUrl)) {
-      httpsRegex = /^https?:\/\//gm;
+    if (!httpsRegex.test(extUrl)) {
+      if (icon.trim() !== "") {
+        //get all of the shared users
+        let sharing = "";
+        userIds.forEach((id) => {
+          let sharingValue = document.getElementById("sharing-" + id).value;
+          sharing += id + "=" + sharingValue + ",";
+        });
 
-      if (!httpsRegex.test(extUrl)) {
+        //get the mdash-token cookie to pass to the api
+        let cookies = document.cookie;
+        cookies = cookies.split(";");
+        let mdashToken = cookies.find((c) =>
+          c.trim().startsWith("mdash-token=")
+        );
+        mdashToken = mdashToken.split("=")[1];
 
-        if(icon.trim() !== ""){
-          //get all of the shared users
-          let sharing = "";
-          userIds.forEach ((id) => {
-            let sharingValue = document.getElementById("sharing-" + id).value;
-            sharing += id + "=" + sharingValue + ",";
+        fetch("add.api.php", {
+          method: "POST",
+          credentials: "same-origin",
+          body: JSON.stringify({
+            name: name,
+            intUrl: intUrl,
+            intUrlSsl: intUrlSsl,
+            extUrl: extUrl,
+            icon: icon,
+            sharing: sharing,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Cookie: "mdash-token=" + mdashToken,
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (json["success"]) {
+              window.location.href = "/dashboard/";
+            } else if (json["error"] !== undefined) {
+              showError("Error", json["error"], 5000);
+            } else {
+              showError("Invald Response", JSON.stringify(json), 5000);
+            }
           });
-
-          //get the mdash-token cookie to pass to the api
-          let cookies = document.cookie;
-          cookies = cookies.split(";");
-          let mdashToken = cookies.find((c) =>
-            c.trim().startsWith("mdash-token=")
-          );
-          mdashToken = mdashToken.split("=")[1];
-
-          fetch("add.api.php", {
-            method: "POST",
-            credentials: "same-origin",
-            body: JSON.stringify({
-              name: name,
-              intUrl: intUrl,
-              intUrlSsl: intUrlSsl,
-              extUrl: extUrl,
-              icon: icon,
-              sharing: sharing,
-            }),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8",
-              Cookie: "mdash-token=" + mdashToken,
-            },
-          })
-            .then((response) => response.json())
-            .then((json) => {
-              if (json["success"]) {
-                window.location.href = "/dashboard/";
-              } else if (json["error"] !== undefined) {
-                showError("Error", json["error"], 5000);
-              } else {
-                showError("Invald Response", JSON.stringify(json), 5000);
-              }
-            });
-          } else {
-            showError("Icon", "Please enter an icon name.", 5000);
-          }
       } else {
-        showError("External URL", "Do not enter http:// or https://.", 5000);
+        showError("Icon", "Please enter an icon name.", 5000);
       }
     } else {
-      showError("Internal URL", "Do not enter http:// or https://.", 5000);
+      showError("External URL", "Do not enter http:// or https://.", 5000);
     }
   } else {
     showError("Name", "Please enter a name.", 5000);

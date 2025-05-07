@@ -32,12 +32,15 @@ if (!isset($_GET["confirm"])) {
 }
 
 if(!isset($_GET["db_pass"])) {
-    redResponse("Please enter the root password for your MySQL server by adding 'db_pass=***' but replace *** with your password. If you never changed it, it is defaultly blank.");
+    redResponse("Please enter the root password for your MySQL server by adding 'db_pass=<your-database-password>'.");
 }
 
 blueResponse("Connecting to the mDash database.");
 
-$dbConn = mysqli_connect("127.0.0.1", "root", $_GET["db_pass"]);
+$config = json_decode(file_get_contents("/mdash/config.json"), true);
+$dbHost = $dbInfo["dbHost"];
+
+$dbConn = mysqli_connect($dbHost, "root", $_GET["db_pass"]);
 
 if (!$dbConn) {
     redResponse("Failed to connect to the mDash database.");

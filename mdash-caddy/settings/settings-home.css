@@ -1,0 +1,24 @@
+#settings-home {
+  display: grid;
+  justify-content: center;
+  width: 100%;
+}
+
+.settings-home-button div .material-symbols-rounded{
+  font-size: 100px;
+  margin: 0;
+}
+
+.settings-home-button div h2,
+.settings-home-button div p{
+  margin: 0;
+}
+
+.settings-home-button{
+  display: flex;
+  align-items: normal;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+}

@@ -17,13 +17,12 @@ require "/var/www/mdash/header.php";
             <?php
             $accountIdEncrypted = encryptData($accountInfo[0]);
             $id = strip_tags($_GET["id"]);
-            $idDecrypted = decryptData($id);
 
             //pull the app info
             $sql = "SELECT `name`, `int_url`, `int_url_ssl`, `ext_url`, `icon`, `sharing`, `owner` FROM `apps` WHERE `id` = ?;";
             $stmt = mysqli_stmt_init($dbConn);
             mysqli_stmt_prepare($stmt, $sql);
-            mysqli_stmt_bind_param($stmt, "s", $idDecrypted);
+            mysqli_stmt_bind_param($stmt, "s", $id);
             $appExecute = mysqli_stmt_execute($stmt);
 
             if (!$appExecute) {
@@ -49,6 +48,7 @@ require "/var/www/mdash/header.php";
             //display the app as it would be on the dashboard
             $name = decryptData($name);
             $intUrl = decryptData($intUrl);
+            $intUrl = $intUrl == "---" ? "" : $intUrl;
             $intUrlSsl = decryptData($intUrlSsl) ? "checked" : "";
             $extUrl = decryptData($extUrl);
             $icon = decryptData($icon);
@@ -67,6 +67,8 @@ require "/var/www/mdash/header.php";
                 <p class="form-secondary">Name</p>
                 <input type="text" id="name" placeholder="Name" value="<?php echo $name; ?>">
             </div>
+
+            <p class="secondary">Leave internal URL blank if you only need a link.</p>
 
             <div class="form-field-double" id="int-url-field">
                 <p class="form-secondary">Internal URL</p>

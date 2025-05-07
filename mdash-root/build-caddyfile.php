@@ -7,7 +7,6 @@ header("Content-Type: application/json");
 $config = json_decode(file_get_contents("/mdash/config.json"), true);
 $encryptionInfo = $config["encryption"];
 $dbInfo = $config["dbData"];
-$docker = $config["docker"];
 
 $dbHost = $dbInfo["dbHost"];
 $dbUser = $dbInfo["dbUser"];
@@ -26,6 +25,13 @@ if (!$dbConn) {
     die("Failed to connect to the database: " . mysqli_connect_error());
 }
 
+$caddyfile = "";
+
+$customCaddyfile = "/mdash/custom.caddyfile";
+if (file_exists($customCaddyfile)) {
+    $caddyfile = file_get_contents($customCaddyfile) . "\n\n# end custom config\n\n";
+}
+
 $sql = "SELECT `int_url`, `int_url_ssl`, `ext_url` FROM apps;";
 $stmt = mysqli_stmt_init($dbConn);
 mysqli_stmt_prepare($stmt, $sql);
@@ -37,14 +43,14 @@ if (!$appQuery) {
 
 mysqli_stmt_bind_result($stmt, $intUrl, $intUrlSsl, $extUrl);
 
-if ($docker) {
-    $caddyfile = ":8080 {\n" .
+if (isset($config["docker"])) {
+    $caddyfile .= ":8080 {\n" .
         "   root * /var/www/mdash/\n" .
         "   file_server\n" .
         "   php_fastcgi 172.220.0.10:9000\n" .
         "}\n\n";
 } else {
-    $caddyfile = ":8080 {\n" .
+    $caddyfile .= ":8080 {\n" .
         "   root * /var/www/mdash/\n" .
         "   file_server\n" .
         "   php_fastcgi unix//run/php/php-fpm.sock\n" .
@@ -59,6 +65,10 @@ while (mysqli_stmt_fetch($stmt)) {
         $encryptionInfo["options"],
         $encryptionInfo["iv"]
     );
+
+    if ($intUrl == "---") {
+        continue;
+    }
 
     $intUrlSsl = openssl_decrypt(
         $intUrlSsl,
@@ -94,7 +104,7 @@ while (mysqli_stmt_fetch($stmt)) {
 
 file_put_contents("/etc/caddy/Caddyfile", $caddyfile);
 shell_exec("cd /etc/caddy/ && caddy fmt --overwrite");
-shell_exec('cd /etc/caddy/ && curl "http://localhost:2019/load" -H "Content-Type: text/caddyfile" --data-binary @Caddyfile');
+shell_exec('cd /etc/caddy/ && curl "http://localhost:2019/load" -sSH "Content-Type: text/caddyfile" --data-binary @Caddyfile');
 
 mysqli_stmt_close($stmt);
 mysqli_close($dbConn);

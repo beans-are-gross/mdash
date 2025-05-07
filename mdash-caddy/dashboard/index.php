@@ -27,7 +27,7 @@ $nickname = decryptData($accountInfo[1]);
                 <button onclick="window.location.href = './add/';">Add App</button>
                 <button onclick="window.location.href = '../settings/';">Settings</button>
             </div>
-            <div id="app-grid" class="app-grid">
+            <div id="app-grid">
                 <!-- Include the script here because the script needs 'app-grid' and the apps need the functions -->
                 <script src="./script.js"></script>
 
@@ -63,9 +63,7 @@ $nickname = decryptData($accountInfo[1]);
 
                     echo "<div class='app' id='app-$id'>";
 
-                    $idEncrypted = encryptData($id);
-
-                    echo "<span class='material-symbols-rounded app-edit' id='app-edit-$id' onclick='window.location.href = `./edit/?id=$idEncrypted`;'>edit</span>";
+                    echo "<span class='material-symbols-rounded app-edit' id='app-edit-$id' onclick='window.location.href = `./edit/?id=$id`;'>edit</span>";
                     echo "<img src='https://cdn.simpleicons.org/$icon'>";
                     echo "<h2>$name</h2>";
 

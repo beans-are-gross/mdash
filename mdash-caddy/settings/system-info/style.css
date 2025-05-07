@@ -1,0 +1,54 @@
+.right{
+  text-align: right;
+}
+
+.right-special{
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+#system-info-grid {
+  display: grid;
+}
+
+.system-info-widget {
+  width: max-content;
+  padding: 10px;
+  margin: 10px;
+  width: 175px;
+  height: 175px;
+  background-color: rgba(128, 128, 128, 0.5);
+  backdrop-filter: blur(10px);
+  color: white;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.system-info-widget h2{
+    margin: 0;
+    text-align: left;
+}
+
+.system-info-widget p,
+.system-info-widget .material-symbols-rounded {
+  text-align: left;
+  margin: 0;
+}
+
+.system-info-widget div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+progress{
+  border-radius: 100px;
+  width: 100%;
+}
+
+progress::-moz-progress-bar,
+progress::-webkit-progress-bar {
+  background-color: #7953A9;
+  border-radius: 100px;
+}
