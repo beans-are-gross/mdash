@@ -3,12 +3,29 @@
     <div>
         <div class="settings-header">
             <h1 id="header-title" style="margin: 0;">Settings</h1>
-            <p class="secondary">Version 1.1</p>
+            <p class="secondary">Version
+                <?php
+                $version = file_get_contents("/mdash/mdash.version");
+                echo $version;
+                ?>
+            </p>
+            <?php
+            $updateCheck = curl_init("https://api.github.com/repos/beans-are-gross/mdash/releases/latest");
+            curl_setopt($updateCheck, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)');");
+            curl_setopt($updateCheck, CURLOPT_RETURNTRANSFER, true);
+            $updateCheck = json_decode(curl_exec($updateCheck), true);
+            $latestVersion = str_replace("v", "", $updateCheck["tag_name"]);
+
+            if($version !== $latestVersion){
+                echo "<a href='{$updateCheck["html_url"]}'>Update to $latestVersion</a>";
+            }
+            ?>
         </div>
         <div class="settings-nav-buttons">
             <button type="button" id="dashboard" onclick="window.location.href = '/dashboard/';">Home</button>
             <button type="button" id="settings" onclick="window.location.href = '/settings/';">Settings</button>
-            <button type="button" id="system-info" onclick="window.location.href = '/settings/system-info/';">System Info</button>
+            <button type="button" id="system-info" onclick="window.location.href = '/settings/system-info/';">System
+                Info</button>
             <button type="button" id="users" onclick="window.location.href = '/settings/users/';">Users</button>
             <button type="button" id="tokens" onclick="window.location.href = '/settings/tokens/';">Tokens</button>
             <button type="button" id="modules" onclick="window.location.href = '/settings/modules/';">Modules</button>
