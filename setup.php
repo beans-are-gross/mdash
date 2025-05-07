@@ -102,6 +102,8 @@ function initQuestion()
 if (!$docker) {
     $update = initQuestion();
     $dbPass = readline("> ");
+
+    system("clear");
 } else {
     $update = false;
 }
