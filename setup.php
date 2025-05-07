@@ -297,6 +297,10 @@ if (!$checkIfUserExistsQuery) {
         greenResponse("No old mDash user found.");
         blueResponse("Creating the mDash user.");
 
+        blueResponse("Generating the database password for mDash.");
+        $dbGeneratedPass = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(32 / strlen($x)))), 1, 32);
+        greenResponse("Generated the database password for mDash successfully.");
+
         $userIp = $docker ? "172.220.0.10" : "127.0.0.1";
 
         $createUserQuery = mysqli_query($dbConn, "CREATE USER IF NOT EXISTS `mdash_php`@`$userIp` IDENTIFIED WITH caching_sha2_password BY '$dbGeneratedPass';");
@@ -333,10 +337,6 @@ greenResponse("Generated the cipher information successfully.");
 blueResponse("Adding the cipher information to the config file.");
 $configJson["encryption"] = ["cipher" => $cipher, "key" => $encryptionKey, "options" => $options, "iv" => $iv];
 greenResponse("Added the cipher information to the config file successfully.");
-
-blueResponse("Generating the database password for mDash.");
-$dbGeneratedPass = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(32 / strlen($x)))), 1, 32);
-greenResponse("Generated the database password for mDash successfully.");
 
 blueResponse("Encrypting the mDash database password for the config file.");
 $encryptedDbPass = openssl_encrypt(
