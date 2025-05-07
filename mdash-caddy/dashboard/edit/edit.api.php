@@ -14,7 +14,7 @@ if (isset($data["name"]) && isset($data["intUrl"]) && isset($data["intUrlSsl"]) 
     $accountId = encryptData($accountInfo[0]);
 
     //decrypt the id
-    $id = decryptData($data["id"]);
+    $id = $data["id"];
 
     //check for a link only app
     $intUrl = empty($data["intUrl"]) ? "---" : $data["intUrl"]; //--- means ignore for build-caddyfile.php
@@ -43,19 +43,20 @@ if (isset($data["name"]) && isset($data["intUrl"]) && isset($data["intUrlSsl"]) 
     while (mysqli_stmt_fetch($stmt)) {
         if ($appExists)
             break;
-        $appExists = $appId == $id ? false : true;
+        $appExists = $appId == $id ? true : false;
     }
 
-    if ($appExists) {
-        echo json_encode(["error" => "An app with the same name or external URL already exists."]);
+    if (!$appExists) {
+        echo json_encode(["error" => "The app you are trying to edit does not exist."]);
         exit;
     }
 
     mysqli_stmt_close($stmt);
 
     $sharing = $data["sharing"];
-    $sharingEncrypted = [encryptData($accountInfo[0]) => encryptData("edit")];
     $sharing = explode(",", $sharing);
+    $sharingEncrypted = [encryptData($accountInfo[0]) => encryptData("edit")];
+
     foreach ($sharing as $user) {
         if (empty($user))
             continue;
@@ -76,10 +77,10 @@ if (isset($data["name"]) && isset($data["intUrl"]) && isset($data["intUrlSsl"]) 
         die("Failed to execute app query: " . mysqli_error($dbConn));
     }
 
-    mysqli_stmt_bind_result($stmt, $sharing);
+    mysqli_stmt_bind_result($stmt, $sharingSql);
     mysqli_stmt_fetch($stmt);
 
-    $sharingCheck = json_decode(decryptData($sharing), true);
+    $sharingCheck = json_decode(decryptData($sharingSql), true);
     if (decryptData($sharingCheck[$accountId]) !== "edit") {
         echo json_encode(["error" => "You dot have access to edit this file."]);
         exit;

@@ -6,8 +6,9 @@
             <p class="secondary">Version 1.1</p>
         </div>
         <div class="settings-nav-buttons">
-            <button type="button" id="dashboard" onclick="window.location.href = '/dashboard/';">Back</button>
+            <button type="button" id="dashboard" onclick="window.location.href = '/dashboard/';">Home</button>
             <button type="button" id="settings" onclick="window.location.href = '/settings/';">Settings</button>
+            <button type="button" id="system-info" onclick="window.location.href = '/settings/system-info/';">System Info</button>
             <button type="button" id="users" onclick="window.location.href = '/settings/users/';">Users</button>
             <button type="button" id="tokens" onclick="window.location.href = '/settings/tokens/';">Tokens</button>
             <button type="button" id="modules" onclick="window.location.href = '/settings/modules/';">Modules</button>

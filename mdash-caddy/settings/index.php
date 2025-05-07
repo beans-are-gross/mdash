@@ -50,6 +50,14 @@ $nickname = decryptData($accountInfo[1]); ?>
                     <p>Add, edit, and remove users from mDash.</p>
                 </div>
             </button>
+            <button type="button" class="settings-home-button"
+                onclick="window.location.href = '/settings/system-info/';">
+                <div>
+                    <span class="material-symbols-rounded">monitor</span>
+                    <h2>System Info</h2>
+                    <p>View the information about your server.</p>
+                </div>
+            </button>
             <button type="button" class="settings-home-button" id="modules"
                 onclick="window.location.href = '/settings/modules/';">
                 <div>
@@ -64,13 +72,6 @@ $nickname = decryptData($accountInfo[1]); ?>
                     <span class="material-symbols-rounded">manufacturing</span>
                     <h2>Edit Config</h2>
                     <p>Edit the config file for Caddy.</p>
-                </div>
-            </button>
-            <button type="button" class="settings-home-button" onclick="window.location.href = '/settings/logout.php';">
-                <div>
-                    <span class="material-symbols-rounded">logout</span>
-                    <h2>Log Out</h2>
-                    <p>Log out your current mDash session.</p>
                 </div>
             </button>
             <script src="./script.js"></script>

@@ -17,13 +17,12 @@ require "/var/www/mdash/header.php";
             <?php
             $accountIdEncrypted = encryptData($accountInfo[0]);
             $id = strip_tags($_GET["id"]);
-            $idDecrypted = decryptData($id);
 
             //pull the app info
             $sql = "SELECT `name`, `int_url`, `int_url_ssl`, `ext_url`, `icon`, `sharing`, `owner` FROM `apps` WHERE `id` = ?;";
             $stmt = mysqli_stmt_init($dbConn);
             mysqli_stmt_prepare($stmt, $sql);
-            mysqli_stmt_bind_param($stmt, "s", $idDecrypted);
+            mysqli_stmt_bind_param($stmt, "s", $id);
             $appExecute = mysqli_stmt_execute($stmt);
 
             if (!$appExecute) {

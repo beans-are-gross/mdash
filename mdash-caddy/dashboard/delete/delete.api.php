@@ -7,7 +7,7 @@ if (isset($_POST["id"])) {
     $accountId = encryptData($accountInfo[0]);
 
     //decrypt the id
-    $id = decryptData($_POST["id"]);
+    $id = $_POST["id"];
 
     //check if the user has edit access
     $sql = "SELECT `sharing` FROM `apps` WHERE `id` = ?;";
