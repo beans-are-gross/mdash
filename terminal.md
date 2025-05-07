@@ -46,7 +46,7 @@ cd mdash
 
 ## Step 4 - Install mDash
 > [!NOTE]
-> If you have another server running MySQL, change "db_host".
+> If your MySQL database is not local, add "db_host=ip-address".
 ```
-sudo php setup.php db_host=127.0.0.1 db_pass=<your-database-password>
+sudo php setup.php
 ```
