@@ -58,8 +58,6 @@ if (!isset($_GET["db_pass"])) {
         if (!isset($dbPass)) {
             redResponse("Please set the root password for your MySQL server using '-e DB_PASS=<your-database-password>'.");
         }
-    } else {
-        redResponse("Please enter the root password for your MySQL server by adding 'db_pass=<your-database-password>'.");
     }
 } else {
     $dbPass = $_GET["db_pass"];
@@ -67,26 +65,43 @@ if (!isset($_GET["db_pass"])) {
 
 system("clear");
 
-echo "\033[94m +--------------+ \033[0m\n";
-echo "\033[94m | mDash Script | \033[0m\n";
-echo "\033[94m +--------------+ \033[0m\n";
-
-if (!$docker) {
-    echo "Please select what you would like to do:\n";
-    echo "1. Install\n";
-    echo "2. Update\n";
-    $ask = readline(">");
-    if ($ask == "1") {
+function initQuestion()
+{
+    echo "+==========================================+\n";
+    echo "| mDash Script                             |\n";
+    echo "| Please select what you would like to do: |\n";
+    echo "+==========================================+\n";
+    echo "| 1. Install                               |\n";
+    echo "| 2. Update                                |\n";
+    echo "+==========================================+\n";
+    $ask = readline("> ");
+    if ($ask == 1) {
         system("clear");
-        greenResponse("Installing mDash");
-        $update = false;
+
+        echo "+============================================+\n";
+        echo "| mDash Install Script                       |\n";
+        echo "| Please enter your MySQL database password: |\n";
+        echo "+============================================+\n";
+
+        return false;
     } else if ($ask == 2) {
         system("clear");
-        greenResponse("Updating mDash");
-        $update = true;
+
+        echo "+============================================+\n";
+        echo "| mDash Update Script                        |\n";
+        echo "| Please enter your MySQL database password: |\n";
+        echo "+============================================+\n";
+
+        return true;
     } else {
-        redResponse("Answer '$ask' is invalid, please run the command again and respond with a valid answer.");
+        redResponse("Answer '$ask' is invalid.");
+        initQuestion();
     }
+}
+
+if (!$docker) {
+    $update = initQuestion();
+    $dbPass = readline("> ");
 } else {
     $update = false;
 }
