@@ -3,7 +3,7 @@ Reverse proxy made easy.
 
 A web GUI controller for Caddy that automatically gives you an SSL certificate.
 
-![](https://github.com/beans-are-gross/mdash-photos/blob/main/Home.png?raw=true)
+![](https://github.com/beans-are-gross/mdash-photos/blob/main/Welcome-2 Apps.png?raw=true)
 
 ## Features
 1. Reverse proxy with a free SSL certificate from Caddy.
