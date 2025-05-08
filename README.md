@@ -21,7 +21,7 @@ docker volume create mdash-caddyfile
 docker network create mdash --subnet 172.220.0.0/24
 
 docker run -d --name mdash-mysql --restart unless-stopped --network mdash --ip 172.220.0.5 -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=<your-database-password> mysql
-docker run -d --name mdash-installer --restart unless-stopped --network mdash -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ -e DB_PASS=<your-database-password> beansaregross/mdash
+docker run -d --name mdash-installer --restart none --network mdash -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ -e DB_PASS=<your-database-password> beansaregross/mdash
 ```
 
 > [!IMPORTANT]
