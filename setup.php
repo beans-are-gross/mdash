@@ -160,14 +160,16 @@ if (!$docker) {
 // | Install and setup Caddy, xcaddy, go, and php-curl |
 // +===================================================+
 
-blueResponse("Installing Caddy. This might take a minute to complete. (Please answer yes to the questions asked.)");
-shell_exec("apt-get install debian-keyring debian-archive-keyring apt-transport-https curl -y");
-shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");        //caddy
-shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");                         //caddy
-shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg");   //xcaddy
-shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list");                    //xcaddy
-shell_exec("apt-get update && apt-get install caddy xcaddy golang-go php-curl -y");
-greenResponse("Successfully installed Caddy.");
+if (!$docker) {
+    blueResponse("Installing Caddy. This might take a minute to complete. (Please answer yes to the questions asked.)");
+    shell_exec("apt-get install debian-keyring debian-archive-keyring apt-transport-https curl -y");
+    shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg");        //caddy
+    shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list");                         //caddy
+    shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg");   //xcaddy
+    shell_exec("curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list");                    //xcaddy
+    shell_exec("apt-get update && apt-get install caddy xcaddy golang-go php-curl -y");
+    greenResponse("Successfully installed Caddy.");
+}
 
 if (!$update) {
     blueResponse("Seting up Caddy configuration.");
@@ -190,20 +192,20 @@ if (!$update) {
 
 shell_exec("cd /etc/caddy/ && caddy fmt --overwrite");
 
-blueResponse("Giving PHP access to Caddyfile.");
-
-blueResponse("Changing Caddyfile owner to root and group to www-data.");
-shell_exec("chown root:www-data /etc/caddy/Caddyfile");
-greenResponse("Successfully changed Caddyfile owner and group.");
-
-blueResponse("Changing Caddyfile access using chmod 660.");
-shell_exec("chmod 660 /etc/caddy/Caddyfile");
-greenResponse("Successfully changed Caddyfile access.");
-
-shell_exec('systemctl reload caddy');
-greenResponse("Set up Caddy configuration successfully.");
-
 if (!$docker) {
+    blueResponse("Giving PHP access to Caddyfile.");
+
+    blueResponse("Changing Caddyfile owner to root and group to www-data.");
+    shell_exec("chown root:www-data /etc/caddy/Caddyfile");
+    greenResponse("Successfully changed Caddyfile owner and group.");
+
+    blueResponse("Changing Caddyfile access using chmod 660.");
+    shell_exec("chmod 660 /etc/caddy/Caddyfile");
+    greenResponse("Successfully changed Caddyfile access.");
+
+    shell_exec('systemctl reload caddy');
+    greenResponse("Set up Caddy configuration successfully.");
+    
     $sudoPermissions = "www-data ALL=(ALL) NOPASSWD: /usr/bin/dpkg-divert --divert /usr/bin/caddy.default --rename /usr/bin/caddy, /usr/bin/mv ./caddy /usr/bin/caddy.custom, /usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.default 10, /usr/bin/update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.custom 50, /usr/bin/systemctl restart caddy";
     if (shell_exec("tail -n 1 /etc/sudoers") !== $sudoPermissions) {
         blueResponse("Updating sudoers file to give the caddy user moving permissions. (For modules)");
