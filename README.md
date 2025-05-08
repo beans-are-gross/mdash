@@ -69,6 +69,7 @@ services:
             - mdash-root:/mdash/
             - mdash-php:/var/www/
         image: beansaregross/mdash-php
+        restart: unless-stopped
     caddy:
         container_name: mdash-caddy
         networks:
@@ -82,6 +83,7 @@ services:
             - mdash-php:/var/www/
             - mdash-caddyfile:/etc/caddy/
         image: caddy
+        restart: unless-stopped
 networks:
     mdash:
         external: true
