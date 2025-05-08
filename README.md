@@ -29,8 +29,8 @@ docker run -d --name mdash-installer --network mdash -v mdash-root:/mdash/ -v md
 > If the status is not 143, please check the logs.
 
 ```
-docker run -d --name mdash-php --network mdash --ip 172.220.0.10 -p 9000:9000 -v mdash-root:/mdash/ -v mdash-php:/var/www/ beansaregross/mdash-php
-docker run -d --name mdash-caddy --network mdash -p 80:80 -p 443:443 -p 8080:8080 -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ caddy
+docker run -d --name mdash-php --restart unless-stopped --network mdash --ip 172.220.0.10 -p 9000:9000 -v mdash-root:/mdash/ -v mdash-php:/var/www/ beansaregross/mdash-php
+docker run -d --name mdash-caddy --network mdash --restart unless-stopped -p 80:80 -p 443:443 -p 8080:8080 -v mdash-root:/mdash/ -v mdash-php:/var/www/ -v mdash-caddyfile:/etc/caddy/ caddy
 ```
 
 ## Docker Compose
